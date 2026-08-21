@@ -6,9 +6,12 @@ const $ = (s, ctx = document) => ctx.querySelector(s);
 const $$ = (s, ctx = document) => [...ctx.querySelectorAll(s)];
 
 /* ---------- NAVBAR ---------- */
-const navbar = $('#navbar');
+const navbar    = $('#navbar');
 const navToggle = $('#navToggle');
-const navMenu = $('#navMenu');
+const navMenu   = $('#navMenu');
+
+/* ---------- REDUCED MOTION --- (verificar ANTES de qualquer animação) --- */
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 window.addEventListener('scroll', () => {
   navbar.classList.toggle('scrolled', window.scrollY > 60);
@@ -26,14 +29,16 @@ navMenu.addEventListener('click', e => {
   }
 });
 
-/* ---------- SMOOTH SCROLL ---------- */
+/* ---------- SMOOTH SCROLL com offset para navbar fixa ---------- */
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
     const target = document.querySelector(a.getAttribute('href'));
-    if (target) {
-      e.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    if (!target) return;
+    e.preventDefault();
+    const navHeight = navbar ? navbar.offsetHeight : 0;
+    const offset    = 24; // breathing room
+    const targetY   = target.getBoundingClientRect().top + window.scrollY - navHeight - offset;
+    window.scrollTo({ top: targetY, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
   });
 });
 
@@ -66,7 +71,8 @@ const statNums = $$('.snum');
 const counterObserver = new IntersectionObserver(entries => {
   entries.forEach(en => {
     if (en.isIntersecting) {
-      animateCounter(en.target);
+      if (!prefersReducedMotion) animateCounter(en.target);
+      else en.target.textContent = en.target.dataset.target; // exibe valor final direto
       counterObserver.unobserve(en.target);
     }
   });
@@ -75,6 +81,7 @@ statNums.forEach(el => counterObserver.observe(el));
 
 /* ---------- CONFETTI ---------- */
 (function spawnConfetti() {
+  if (prefersReducedMotion) return; // respeita preferência do sistema
   const wrap = $('#confettiWrap');
   if (!wrap) return;
   const colors = ['#F5C518', '#fff', '#ffaaaa', '#fff5cc'];
@@ -193,6 +200,7 @@ function closeModal() {
 function buildServicos() {
   const grid = $('#servicosGrid');
   if (!grid) return;
+  grid.innerHTML = ''; // limpa skeletons
   SERVICOS.forEach((s, i) => {
     const el = document.createElement('div');
     el.className = 'serv-card reveal';
@@ -211,6 +219,7 @@ function buildServicos() {
 function buildBrincadeiras() {
   const grid = $('#brincGrid');
   if (!grid) return;
+  grid.innerHTML = ''; // limpa skeletons
   BRINCADEIRAS.forEach((b, i) => {
     const el = document.createElement('div');
     el.className = 'brinc-card reveal';
@@ -278,6 +287,7 @@ $$('.gtab').forEach(tab => {
 function buildDepoimentos() {
   const grid = $('#depoGrid');
   if (!grid) return;
+  grid.innerHTML = ''; // limpa skeletons
   DEPOIMENTOS.forEach((d, i) => {
     const el = document.createElement('div');
     el.className = 'depo-card reveal';
@@ -298,11 +308,115 @@ function buildDepoimentos() {
   });
 }
 
+/* ---------- MICRO-INTERAÇÕES — RIPPLE EFFECT ---------- */
+function addRipple(e) {
+  const btn  = e.currentTarget;
+  const ripple = document.createElement('span');
+  const rect = btn.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height);
+  ripple.style.cssText = `
+    position:absolute;
+    border-radius:50%;
+    width:${size}px;height:${size}px;
+    left:${e.clientX - rect.left - size / 2}px;
+    top:${e.clientY - rect.top - size / 2}px;
+    background:rgba(255,255,255,0.3);
+    transform:scale(0);
+    animation:ripple-effect 600ms ease-out forwards;
+    pointer-events:none;
+  `;
+  btn.style.position = 'relative';
+  btn.style.overflow  = 'hidden';
+  btn.appendChild(ripple);
+  ripple.addEventListener('animationend', () => ripple.remove());
+}
+if (!prefersReducedMotion) {
+  document.querySelectorAll('.btn').forEach(btn => btn.addEventListener('click', addRipple));
+}
+
+/* ---------- MICRO-INTERAÇÕES — TILT 3D (desktop only) ---------- */
+function addTiltEffect(selector) {
+  document.querySelectorAll(selector).forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width  - 0.5;
+      const y = (e.clientY - rect.top)  / rect.height - 0.5;
+      card.style.transform = `translateY(-6px) rotateX(${-y * 5}deg) rotateY(${x * 5}deg)`;
+      card.style.transition = 'transform 100ms ease';
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+      card.style.transition = '';
+    });
+  });
+}
+if (!prefersReducedMotion && window.matchMedia('(hover: hover)').matches) {
+  // aplicado após build nas seções dinâmicas — veja initTilts()
+}
+
+function initTilts() {
+  if (prefersReducedMotion || !window.matchMedia('(hover: hover)').matches) return;
+  addTiltEffect('.rec-card');
+  addTiltEffect('.serv-card');
+  addTiltEffect('.depo-card');
+}
+
+/* ---------- SKELETON SCREENS ---------- */
+function skeletonRecreador() {
+  return `
+    <div class="rec-card-skeleton">
+      <div class="skeleton sk-avatar"></div>
+      <div class="skeleton sk-line sk-w60"></div>
+      <div class="skeleton sk-line sk-w80"></div>
+      <div class="skeleton sk-line sk-w50"></div>
+    </div>`;
+}
+function skeletonServico() {
+  return `
+    <div class="serv-card-skeleton">
+      <div class="skeleton sk-icon"></div>
+      <div class="skeleton sk-title"></div>
+      <div class="skeleton sk-desc-line sk-w80"></div>
+      <div class="skeleton sk-desc-line sk-w60"></div>
+      <div class="skeleton sk-desc-line sk-w70"></div>
+    </div>`;
+}
+function skeletonDepoimento() {
+  return `
+    <div class="depo-card-skeleton">
+      <div class="skeleton sk-stars"></div>
+      <div class="skeleton sk-text-line sk-w80"></div>
+      <div class="skeleton sk-text-line sk-w80"></div>
+      <div class="skeleton sk-text-line sk-w60"></div>
+      <div class="depo-card-skeleton sk-author">
+        <div class="skeleton sk-av"></div>
+        <div style="flex:1">
+          <div class="skeleton sk-line sk-w80" style="height:12px;margin-bottom:6px"></div>
+          <div class="skeleton sk-line sk-w60" style="height:10px"></div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function showSkeletons() {
+  const recreGrid = $('#recreGrid');
+  const servicosGrid = $('#servicosGrid');
+  const depoGrid  = $('#depoGrid');
+  if (recreGrid)    recreGrid.innerHTML   = Array(10).fill(skeletonRecreador()).join('');
+  if (servicosGrid) servicosGrid.innerHTML = Array(6).fill(skeletonServico()).join('');
+  if (depoGrid)     depoGrid.innerHTML    = Array(3).fill(skeletonDepoimento()).join('');
+}
+
 /* ---------- INIT ---------- */
 document.addEventListener('DOMContentLoaded', () => {
-  buildRecreadores();
-  buildServicos();
-  buildBrincadeiras();
-  buildGaleria();
-  buildDepoimentos();
+  showSkeletons();
+  // Pequeno delay para garantir shimmer visível antes do conteúdo
+  setTimeout(() => {
+    buildRecreadores();
+    buildServicos();
+    buildBrincadeiras();
+    buildGaleria();
+    buildDepoimentos();
+    initTilts(); // ativar tilt depois que cards existem no DOM
+  }, 350);
 });
