@@ -1,0 +1,98 @@
+---
+import Base from "../layouts/Base.astro";
+import Pendente from "../components/Pendente.astro";
+import { empresa } from "../data/empresa";
+import { linkWhatsApp } from "../lib/whatsapp";
+---
+
+<Base
+  titulo="Política de privacidade · Lazer Recreações"
+  descricao="Como a Lazer Recreações trata os dados de famílias e crianças, de acordo com a LGPD."
+>
+  <article class="secao">
+    <div class="container politica">
+      <p class="sobretitulo">LGPD</p>
+      <h1 class="display politica__titulo">Política de privacidade</h1>
+      <p class="politica__data">Última atualização: 25 de setembro de 2026</p>
+
+      <h2>Quem somos</h2>
+      <p>
+        {empresa.nome}, empresa de recreação infantil de {empresa.cidade}, {empresa.uf}. Para
+        qualquer assunto sobre seus dados, fale com a gente pelo WhatsApp{" "}
+        {empresa.whatsapp.exibicao}.
+      </p>
+      <Pendente
+        rotulo="CNPJ e razão social"
+        detalhe="Incluir antes da publicação oficial"
+        class="politica__pendente"
+      />
+
+      <h2>O que este site coleta</h2>
+      <p>
+        Nada fica guardado neste site. O formulário "Monte sua festa" apenas monta uma mensagem no
+        seu navegador e abre o WhatsApp; você decide se envia. Não usamos cookies de rastreamento
+        nem ferramentas de análise no momento. Se isso mudar, esta página será atualizada antes.
+      </p>
+
+      <h2>Dados que você envia pelo WhatsApp</h2>
+      <p>
+        Para preparar o orçamento e realizar a festa, usamos o que você nos conta: seu nome e
+        telefone, data, horário e local do evento, nome e idade do aniversariante, número e faixa
+        etária das crianças. Esses dados servem só para atender você e organizar a equipe, e não são
+        vendidos nem repassados para terceiros fora dessa finalidade. O WhatsApp é um serviço da
+        Meta, com política de privacidade própria.
+      </p>
+
+      <h2>Fotos e vídeos de crianças</h2>
+      <p>
+        Imagens de crianças só são publicadas com autorização dos responsáveis. Se quiser que uma
+        imagem seja removida, basta pedir pelo WhatsApp.
+      </p>
+
+      <h2>Seus direitos</h2>
+      <p>
+        Pela Lei Geral de Proteção de Dados (Lei 13.709/2018), você pode pedir para saber quais
+        dados temos, corrigir, apagar ou revogar uma autorização a qualquer momento.
+        <a
+          href={linkWhatsApp("Olá! Quero falar sobre os meus dados pessoais (LGPD).")}
+          target="_blank"
+          rel="noopener"
+        >
+          Fale com a gente
+        </a>
+        .
+      </p>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .politica {
+    max-width: 46rem;
+  }
+  .politica__titulo {
+    font-size: var(--step-4);
+  }
+  .politica__data {
+    margin-top: var(--space-s);
+    color: var(--text-subtle);
+    font-size: var(--step--1);
+  }
+  .politica h2 {
+    margin-top: var(--space-2xl);
+    margin-bottom: var(--space-s);
+    font-size: var(--step-2);
+  }
+  .politica p {
+    color: var(--text-muted);
+  }
+  .politica a {
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .politica :global(.politica__pendente) {
+    min-height: 0;
+    margin-top: var(--space-m);
+    border-radius: var(--radius-m);
+  }
+</style>

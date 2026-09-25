@@ -1,0 +1,202 @@
+---
+import Bonequinho from "../Bonequinho.astro";
+
+const passos = [
+  {
+    titulo: "Chame no WhatsApp",
+    texto:
+      "Conte a data, o lugar e quantas crianças vão brincar. Se preferir, monte sua festa aqui no site e a mensagem vai pronta.",
+  },
+  {
+    titulo: "Receba a proposta",
+    texto:
+      "A gente sugere pacote, equipe e brincadeiras pela idade das crianças e pelo espaço. A data fica reservada com o sinal.",
+  },
+  {
+    titulo: "Curta a festa",
+    texto:
+      "No dia, a equipe chega fardada e comanda a brincadeira do começo ao fim. Você só aproveita.",
+  },
+];
+---
+
+<section id="como-funciona" class="secao passos" aria-labelledby="passos-titulo">
+  <div class="container">
+    <p class="sobretitulo revela">Como funciona</p>
+    <h2 id="passos-titulo" class="display titulo-secao revela">
+      Da mensagem à festa em <span class="destaque">três passos.</span>
+    </h2>
+
+    <div class="passos__corpo" data-passos style="--p: 0">
+      <div class="passos__trilha" aria-hidden="true">
+        <span class="passos__progresso"></span>
+        <div class="passos__boneco">
+          <Bonequinho />
+        </div>
+      </div>
+      <ol class="passos__lista">
+        {passos.map((p, i) => (
+          <li class="passo" data-passo>
+            <span class="passo__numero display" aria-hidden="true">
+              {i + 1}
+            </span>
+            <h3 class="passo__titulo">{p.titulo}</h3>
+            <p class="passo__texto">{p.texto}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .passos__corpo {
+    --boneco: 4.5rem;
+    position: relative;
+    margin-top: var(--space-2xl);
+    padding-left: calc(var(--boneco) + var(--space-l));
+  }
+  .passos__trilha {
+    position: absolute;
+    left: calc(var(--boneco) / 2 - 2px);
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    border-radius: 4px;
+    background: repeating-linear-gradient(
+      180deg,
+      var(--border-strong) 0 10px,
+      transparent 10px 18px
+    );
+  }
+  .passos__progresso {
+    position: absolute;
+    inset: 0 0 auto;
+    height: calc(var(--p) * 100%);
+    border-radius: inherit;
+    background: linear-gradient(180deg, var(--red), var(--brand-yellow));
+  }
+  .passos__boneco {
+    position: absolute;
+    left: 50%;
+    top: calc(var(--p) * 100%);
+    width: var(--boneco);
+    translate: -50% -60%;
+  }
+  .passos__lista {
+    display: grid;
+    gap: var(--space-2xl);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .passo {
+    display: grid;
+    gap: var(--space-xs);
+    opacity: 0.45;
+    transition: opacity 400ms var(--ease-out);
+  }
+  .passo.is-ativo,
+  :global(html:not(.js)) .passo {
+    opacity: 1;
+  }
+  .passo__numero {
+    font-size: var(--step-5);
+    line-height: 0.9;
+    color: transparent;
+    -webkit-text-stroke: 2px var(--text-subtle);
+    transition:
+      color 400ms var(--ease-out),
+      -webkit-text-stroke-color 400ms var(--ease-out);
+  }
+  .passo.is-ativo .passo__numero {
+    color: var(--accent);
+    -webkit-text-stroke-color: var(--brand-ink);
+    text-shadow: calc(var(--layer-sm) * -1) var(--layer-sm) 0 var(--red);
+  }
+  .passo__titulo {
+    font-size: var(--step-2);
+  }
+  .passo__texto {
+    color: var(--text-muted);
+    max-width: 36ch;
+  }
+
+  @media (min-width: 60rem) {
+    .passos__corpo {
+      padding-left: 0;
+      padding-top: calc(var(--boneco) + var(--space-xl));
+    }
+    .passos__trilha {
+      left: 0;
+      right: 0;
+      top: calc(var(--boneco) - 2px);
+      bottom: auto;
+      width: auto;
+      height: 4px;
+      background: repeating-linear-gradient(
+        90deg,
+        var(--border-strong) 0 10px,
+        transparent 10px 18px
+      );
+    }
+    .passos__progresso {
+      inset: 0 auto 0 0;
+      height: auto;
+      width: calc(var(--p) * 100%);
+      background: linear-gradient(90deg, var(--red), var(--brand-yellow));
+    }
+    .passos__boneco {
+      left: calc(var(--p) * (100% - var(--boneco)));
+      top: auto;
+      bottom: 4px;
+      translate: 0 0;
+    }
+    .passos__lista {
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-2xl);
+    }
+  }
+</style>
+
+<script>
+  const corpo = document.querySelector<HTMLElement>("[data-passos]");
+  if (corpo) {
+    const passos = corpo.querySelectorAll<HTMLElement>("[data-passo]");
+    const boneco = corpo.querySelector<SVGElement>("svg.boneco");
+    const reduz = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let parado: number | undefined;
+    let agendado = false;
+
+    const atualiza = () => {
+      agendado = false;
+      const r = corpo.getBoundingClientRect();
+      const inicio = innerHeight * 0.8;
+      const p = Math.min(1, Math.max(0, (inicio - r.top) / (r.height + innerHeight * 0.35)));
+      corpo.style.setProperty("--p", p.toFixed(3));
+      passos.forEach((el, i) => el.classList.toggle("is-ativo", p >= i / passos.length + 0.02));
+    };
+
+    if (reduz) {
+      corpo.style.setProperty("--p", "1");
+      passos.forEach((el) => el.classList.add("is-ativo"));
+    } else {
+      atualiza();
+      addEventListener(
+        "scroll",
+        () => {
+          if (!agendado) {
+            agendado = true;
+            requestAnimationFrame(atualiza);
+          }
+          // O bonequinho só "anda" enquanto a página rola
+          boneco?.classList.add("boneco--anda");
+          clearTimeout(parado);
+          parado = window.setTimeout(() => boneco?.classList.remove("boneco--anda"), 180);
+        },
+        { passive: true },
+      );
+      addEventListener("resize", atualiza, { passive: true });
+    }
+  }
+</script>

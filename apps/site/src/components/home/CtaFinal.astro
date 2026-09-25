@@ -1,0 +1,73 @@
+---
+import Bonequinho from "../Bonequinho.astro";
+import IconeWhatsApp from "../IconeWhatsApp.astro";
+import { empresa } from "../../data/empresa";
+import { linkWhatsApp, mensagemGeral } from "../../lib/whatsapp";
+---
+
+<section class="secao cta-final" aria-labelledby="cta-final-titulo" data-esconde-cta-fixo>
+  <div class="container">
+    <div class="camada camada--vermelha cta-final__caixa revela">
+      <div class="cta-final__texto">
+        <h2 id="cta-final-titulo" class="display cta-final__titulo">
+          Chama a <span class="destaque">Lazer.</span>
+        </h2>
+        <p class="texto-apoio">
+          Conte a data, o lugar e quantas crianças vão brincar. O resto é com a gente.
+        </p>
+        <a
+          class="botao botao--grande"
+          href={linkWhatsApp(mensagemGeral())}
+          target="_blank"
+          rel="noopener"
+          data-evento="whatsapp_cta_final"
+        >
+          <IconeWhatsApp />
+          Quero um orçamento
+        </a>
+        <p class="cta-final__micro">
+          WhatsApp {empresa.whatsapp.exibicao} · falar com {empresa.whatsapp.contato}
+        </p>
+      </div>
+      <div class="cta-final__boneco" data-boneco-pula>
+        <Bonequinho pose="acena" olhar />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta-final__caixa {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: center;
+    margin-left: var(--layer);
+    padding: clamp(2rem, 1rem + 4vw, 4.5rem);
+    background:
+      radial-gradient(40rem 20rem at 100% 0%, oklch(40% 0.14 28 / 0.55), transparent 70%),
+      var(--surface-2);
+    overflow: hidden;
+  }
+  @media (min-width: 48rem) {
+    .cta-final__caixa {
+      grid-template-columns: 1fr auto;
+    }
+  }
+  .cta-final__texto {
+    display: grid;
+    gap: var(--space-l);
+    justify-items: start;
+  }
+  .cta-final__titulo {
+    font-size: var(--step-5);
+  }
+  .cta-final__micro {
+    font-size: var(--step--1);
+    color: var(--text-subtle);
+  }
+  .cta-final__boneco {
+    width: clamp(8rem, 6rem + 8vw, 13rem);
+    justify-self: center;
+    cursor: pointer;
+  }
+</style>

@@ -1,0 +1,75 @@
+---
+import Pendente from "../Pendente.astro";
+import { empresa } from "../../data/empresa";
+
+const molduras = [
+  { giro: -3, detalhe: "Parabéns com a equipe" },
+  { giro: 2, detalhe: "Pintura facial" },
+  { giro: -1.5, detalhe: "Gincana em área externa" },
+  { giro: 3, detalhe: "Colônia de férias" },
+  { giro: -2, detalhe: "Espaço kids" },
+  { giro: 1.5, detalhe: "Equipe fardada reunida" },
+];
+---
+
+<section class="secao galeria" aria-labelledby="galeria-titulo">
+  <div class="container">
+    <div class="galeria__topo">
+      <div>
+        <p class="sobretitulo revela">Galeria</p>
+        <h2 id="galeria-titulo" class="display titulo-secao revela">
+          A festa de verdade está no <span class="destaque">Instagram.</span>
+        </h2>
+      </div>
+      <a
+        class="botao botao--fantasma revela"
+        href={empresa.instagram.url}
+        target="_blank"
+        rel="noopener"
+      >
+        Ver @{empresa.instagram.usuario}
+      </a>
+    </div>
+    <ul class="galeria__grade" role="list">
+      {molduras.map((m, i) => (
+        <li class="revela" style={`--i: ${i % 3}`}>
+          <figure class="camada camada--interativa galeria__foto" style={`rotate: ${m.giro}deg`}>
+            <Pendente rotulo="Foto do Instagram" detalhe={m.detalhe} />
+          </figure>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .galeria__topo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--space-l);
+  }
+  .galeria__grade {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: calc(var(--space-l) + var(--layer));
+    margin: var(--space-2xl) 0 0;
+    padding: 0 0 0 var(--layer);
+    list-style: none;
+  }
+  @media (min-width: 60rem) {
+    .galeria__grade {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .galeria__foto {
+    margin: 0;
+    aspect-ratio: 1;
+  }
+  .galeria__foto :global(.pendente) {
+    border-radius: calc(var(--radius-l) - var(--outline));
+    min-height: 0;
+    padding: var(--space-s);
+  }
+</style>
