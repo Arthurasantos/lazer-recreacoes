@@ -1,0 +1,78 @@
+/*
+ * Lazer Recreações — tokens visuais
+ * Direção criativa: "Camada Dupla" (ver docs/direcao-criativa.md)
+ * Tema escuro obrigatório. Cores da marca medidas no logo oficial.
+ */
+:root {
+  color-scheme: dark;
+
+  /* Marca (valores exatos do logo) */
+  --brand-red: #e3050f;
+  --brand-yellow: #fdf305;
+  --brand-ink: #140608; /* contorno preto do logo */
+  --brand-cream: oklch(95.5% 0.015 75); /* texto do logo no escuro */
+
+  /* Superfícies: vinho profundo derivado do vermelho da marca */
+  --bg-deep: oklch(12.5% 0.03 20);
+  --bg: oklch(15.5% 0.038 20);
+  --surface-1: oklch(20% 0.048 22);
+  --surface-2: oklch(25% 0.058 24);
+  --surface-3: oklch(30% 0.065 25);
+  --border: oklch(100% 0 0 / 0.1);
+  --border-strong: oklch(100% 0 0 / 0.2);
+
+  /* Texto */
+  --text: oklch(95% 0.012 75);
+  --text-muted: oklch(80% 0.025 50);
+  --text-subtle: oklch(70% 0.03 40);
+
+  /* Ação: o amarelo é reservado para CTA e destaques pequenos */
+  --accent: oklch(91% 0.19 104);
+  --accent-hover: oklch(95% 0.2 106);
+  --accent-ink: oklch(17% 0.045 20);
+  --red: oklch(60% 0.235 28);
+  --red-bright: oklch(66% 0.22 28); /* vermelho legível sobre o vinho */
+
+  /* Assinatura: camada dupla (a camada de trás desce para a esquerda, como no L) */
+  --layer: clamp(0.5rem, 0.35rem + 0.5vw, 0.8rem);
+  --layer-sm: 0.35rem;
+  --outline: 3px;
+
+  /* Tipografia */
+  --font-display: "Fraunces Variable", "Georgia", serif;
+  --font-body: "Figtree Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --display-axes: normal; /* opsz é aplicado automaticamente pelo tamanho da fonte */
+
+  --step--1: clamp(0.875rem, 0.85rem + 0.12vw, 0.95rem);
+  --step-0: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+  --step-1: clamp(1.2rem, 1.1rem + 0.45vw, 1.45rem);
+  --step-2: clamp(1.45rem, 1.25rem + 0.9vw, 2rem);
+  --step-3: clamp(1.8rem, 1.45rem + 1.6vw, 2.85rem);
+  --step-4: clamp(2.3rem, 1.7rem + 2.8vw, 4.2rem);
+  --step-5: clamp(2.9rem, 1.9rem + 4.8vw, 6.8rem);
+
+  /* Espaço (escala de 4/8) */
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-s: 0.75rem;
+  --space-m: 1rem;
+  --space-l: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4.5rem;
+  --space-section: clamp(4.5rem, 2.5rem + 7vw, 9.5rem);
+  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+  --max-width: 76rem;
+
+  /* Formas */
+  --radius-s: 0.5rem;
+  --radius-m: 0.9rem;
+  --radius-l: 1.5rem;
+  --radius-pill: 999px;
+
+  /* Movimento */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-ui: 200ms;
+  --dur-story: 700ms;
+}

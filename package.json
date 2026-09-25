@@ -1,0 +1,22 @@
+{
+  "name": "lazer-recreacoes",
+  "private": true,
+  "description": "Sistema da Lazer Recreações: site, portal do recreador, painel e assistente de WhatsApp.",
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @lazer/site dev",
+    "build": "pnpm -r build",
+    "check": "pnpm -r check",
+    "test": "pnpm -r test",
+    "e2e": "pnpm -r e2e",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "prettier": "^3.9.9",
+    "prettier-plugin-astro": "^1.1.0"
+  }
+}

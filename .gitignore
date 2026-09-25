@@ -1,15 +1,21 @@
 # Sistema
 .DS_Store
 Thumbs.db
-desktop.ini
 
-# IDEs
-.vscode/
+# Editores
+.vscode/*
+!.vscode/extensions.json
 .idea/
 
-# Node (caso use futuramente)
+# Dependências e builds
 node_modules/
-npm-debug.log*
-
-# Build
 dist/
+.astro/
+coverage/
+test-results/
+playwright-report/
+
+# Segredos (nunca versionar)
+.env
+.env.*
+!.env.example
