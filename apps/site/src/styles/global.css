@@ -37,24 +37,44 @@ body {
   line-height: 1.65;
   color: var(--text);
   background:
-    radial-gradient(70rem 48rem at 85% -12%, oklch(34% 0.11 24 / 0.55), transparent 62%),
-    radial-gradient(50rem 36rem at -10% 30%, oklch(30% 0.09 30 / 0.35), transparent 60%),
-    radial-gradient(40rem 30rem at 50% 105%, oklch(40% 0.12 95 / 0.12), transparent 70%), var(--bg);
+    radial-gradient(60rem 40rem at 90% -10%, oklch(95% 0.12 103 / 0.8), transparent 65%),
+    radial-gradient(45rem 30rem at -10% 40%, oklch(93% 0.06 30 / 0.45), transparent 60%), var(--bg);
   background-attachment: fixed;
   overflow-x: clip;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Grão sutil para o escuro não ficar chapado */
-body::before {
+/* Confete: textura de festa, esmaecendo em direção ao texto (lado esquerdo) */
+.confete {
+  position: relative;
+  isolation: isolate;
+}
+.confete::before {
   content: "";
-  position: fixed;
+  position: absolute;
   inset: 0;
-  z-index: 100;
+  z-index: -1;
   pointer-events: none;
-  opacity: 0.07;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  mix-blend-mode: overlay;
+  background-size: 260px 260px;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0 55%, #000 90%);
+  mask-image: linear-gradient(180deg, transparent 0 55%, #000 90%);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cg opacity='.55'%3E%3Crect x='18' y='24' width='10' height='5' rx='1.5' fill='%23e3050f' transform='rotate(28 23 26)'/%3E%3Ccircle cx='96' cy='40' r='4' fill='%23f2d200'/%3E%3Crect x='160' y='18' width='9' height='5' rx='1.5' fill='%23f2d200' transform='rotate(-35 164 20)'/%3E%3Ccircle cx='190' cy='110' r='3.5' fill='%23e3050f'/%3E%3Crect x='60' y='120' width='10' height='5' rx='1.5' fill='%23140608' opacity='.5' transform='rotate(60 65 122)'/%3E%3Ccircle cx='30' cy='180' r='4' fill='%23f2d200'/%3E%3Crect x='120' y='170' width='10' height='5' rx='1.5' fill='%23e3050f' transform='rotate(-15 125 172)'/%3E%3Cpath d='M140 90q6-8 12 0t12 0' stroke='%23e3050f' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3C/g%3E%3C/svg%3E");
+}
+@media (min-width: 60rem) {
+  .confete::before {
+    -webkit-mask-image: linear-gradient(90deg, transparent 0 45%, #000 80%);
+    mask-image: linear-gradient(90deg, transparent 0 45%, #000 80%);
+  }
+}
+
+/* Bandeirinhas de festa (vermelho e amarelo) */
+:root {
+  --bandeirinhas-img: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='30'%3E%3Cpath d='M0 3 Q36 9 72 3' stroke='%23140608' stroke-width='2' fill='none'/%3E%3Cpath d='M4 4 L32 6 L18 28 Z' fill='%23e3050f' stroke='%23140608' stroke-width='1.5' stroke-linejoin='round'/%3E%3Cpath d='M40 6 L68 4 L54 28 Z' fill='%23fdf305' stroke='%23140608' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.bandeirinhas {
+  display: block;
+  height: 30px;
+  background: var(--bandeirinhas-img) repeat-x left top / 72px 30px;
 }
 
 img,
@@ -87,7 +107,7 @@ a {
 }
 
 :focus-visible {
-  outline: 3px solid var(--accent);
+  outline: 3px solid var(--realce);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -143,13 +163,15 @@ main {
 }
 
 .secao--elevada {
-  background: linear-gradient(
-    180deg,
-    transparent,
-    oklch(19% 0.045 22 / 0.7) 12%,
-    oklch(19% 0.045 22 / 0.7) 88%,
-    transparent
-  );
+  background: var(--bg-deep);
+  padding-top: calc(var(--space-section) + 1rem);
+}
+.secao--elevada::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 30px;
+  background: var(--bandeirinhas-img) repeat-x left top / 72px 30px;
 }
 
 /* ---------- Tipografia ---------- */
@@ -176,7 +198,7 @@ main {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--realce);
 }
 .sobretitulo::before {
   content: "";
@@ -200,9 +222,9 @@ main {
 
 /* Palavra em destaque com a camada dupla do logo */
 .destaque {
-  color: var(--accent);
+  color: var(--red);
   text-shadow:
-    -0.045em 0.045em 0 var(--red),
+    -0.045em 0.045em 0 var(--brand-yellow),
     -0.07em 0.07em 0 var(--brand-ink);
   padding-inline-end: 0.08em;
 }
@@ -301,7 +323,7 @@ main {
   box-shadow: none;
 }
 .botao--fantasma:hover {
-  background: oklch(100% 0 0 / 0.06);
+  background: oklch(22% 0.04 20 / 0.05);
   border-color: var(--text-muted);
 }
 @media (hover: hover) and (pointer: fine) {
@@ -320,7 +342,7 @@ main {
     transparent 36% 46%,
     var(--brand-yellow) 46% 72%,
     transparent 72% 80%,
-    var(--brand-cream) 80% 100%
+    var(--red) 80% 100%
   );
 }
 
@@ -345,7 +367,7 @@ main {
   text-underline-offset: 0.2em;
 }
 .migalhas [aria-current] {
-  color: var(--accent);
+  color: var(--realce);
   font-weight: 700;
 }
 

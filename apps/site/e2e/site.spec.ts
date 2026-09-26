@@ -42,6 +42,21 @@ test.describe("home", () => {
     await expect(page.locator("[data-anos]").first()).toHaveText(String(anos));
   });
 
+  test("fotos reais têm texto alternativo e a do topo carrega primeiro, em AVIF", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const semAlt = await page.locator("main img:not([alt]), main img[alt='']").count();
+    expect(semAlt).toBe(0);
+    const topo = page.locator("[data-hero] img.foto");
+    await expect(topo).toHaveAttribute("fetchpriority", "high");
+    await expect(topo).toHaveAttribute("loading", "eager");
+    await expect(page.locator("[data-hero] picture source[type='image/avif']")).toHaveCount(1);
+    expect(
+      await topo.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0),
+    ).toBe(true);
+  });
+
   test("não há erros no console", async ({ page }) => {
     const erros: string[] = [];
     page.on("pageerror", (e) => erros.push(String(e)));

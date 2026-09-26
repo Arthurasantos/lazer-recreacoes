@@ -37,8 +37,16 @@ const linhas = [
 
 <style>
   .brincadeiras {
-    padding-block: var(--space-2xl);
+    padding-block: var(--space-2xl) var(--space-3xl);
     overflow: hidden;
+    background: var(--red);
+    color: var(--on-red);
+  }
+  .brincadeiras .sobretitulo {
+    color: var(--brand-yellow);
+  }
+  .brincadeiras .sobretitulo::before {
+    background: var(--brand-yellow);
   }
   .brincadeiras__titulo {
     font-size: var(--step-2);
@@ -66,7 +74,8 @@ const linhas = [
     padding: 0.55rem 1.1rem;
     border: var(--outline) solid var(--brand-ink);
     border-radius: var(--radius-pill);
-    background: var(--surface-2);
+    background: var(--surface-1);
+    color: var(--text);
     box-shadow:
       -4px 4px 0 0 var(--brand-yellow),
       -4px 4px 0 var(--outline) var(--brand-ink);
@@ -74,9 +83,7 @@ const linhas = [
     white-space: nowrap;
   }
   .brincadeiras__linha--volta .brincadeiras__chip {
-    box-shadow:
-      -4px 4px 0 0 var(--red),
-      -4px 4px 0 var(--outline) var(--brand-ink);
+    box-shadow: -4px 4px 0 0 var(--brand-ink);
   }
   @media (prefers-reduced-motion: no-preference) {
     .brincadeiras__trilho {

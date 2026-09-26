@@ -108,14 +108,15 @@ const anos = anosDesde(empresa.fundacao);
     color: var(--text-muted);
   }
   .cuidado__card--destaque {
-    --camada-cor: var(--red);
-    background: var(--surface-2);
+    background: var(--red);
+    color: var(--on-red);
     min-height: 22rem;
     overflow: hidden;
   }
-  .cuidado__anos {
+  .cuidado__card--destaque .cuidado__anos {
     font-size: var(--step-5);
-    color: var(--accent);
+    color: var(--brand-yellow);
+    text-shadow: -0.05em 0.05em 0 var(--brand-ink);
     line-height: 0.9;
   }
   .cuidado__card--destaque h3 {
@@ -123,6 +124,7 @@ const anos = anosDesde(empresa.fundacao);
   }
   .cuidado__card--destaque p {
     max-width: 34ch;
+    color: var(--on-red);
   }
   .cuidado__boneco {
     width: 7.5rem;

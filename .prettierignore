@@ -3,4 +3,4 @@ dist
 .astro
 node_modules
 **/*.svg
-ferramentas/og.html
+apps/site/ferramentas/og.html

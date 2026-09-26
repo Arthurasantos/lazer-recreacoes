@@ -4,6 +4,7 @@
  * Regra: nada de promessa que a Lazer não cumpra. Na dúvida, ficar no genérico e verdadeiro.
  */
 import type { Pergunta } from "./faq";
+import type { FotoId } from "./fotos";
 
 export type Servico = {
   id: string;
@@ -26,7 +27,9 @@ export type Servico = {
     /** ids de data/brincadeiras.ts */
     brincadeiras: string[];
     perguntas: Pergunta[];
-    /** Descrição da foto que falta para esta página */
+    /** Foto real da página; sem ela, aparece o marcador com a descrição em `foto` */
+    fotoId?: FotoId;
+    /** Descrição da foto ideal para esta página */
     foto: string;
   };
 };
@@ -84,6 +87,7 @@ export const servicos: Servico[] = [
             "Conte as idades no orçamento. A equipe monta a programação pensando em todas as faixas de idade da festa.",
         },
       ],
+      fotoId: "senna",
       foto: "Recreador fardado animando um aniversário",
     },
   },
@@ -134,6 +138,7 @@ export const servicos: Servico[] = [
             "Você define os dias e o horário, e o orçamento é montado a partir disso. Conte no WhatsApp quantas crianças e quais idades.",
         },
       ],
+      fotoId: "futebolTurma",
       foto: "Grupo de crianças em atividade de colônia de férias",
     },
   },
@@ -184,6 +189,7 @@ export const servicos: Servico[] = [
             "Dá. Várias brincadeiras cabem em espaço pequeno. No catálogo, filtre por “espaço pequeno” para ver ideias.",
         },
       ],
+      fotoId: "risadas",
       foto: "Crianças brincando em casa ou no salão do condomínio",
     },
   },
@@ -331,6 +337,7 @@ export const servicos: Servico[] = [
             "Depende do número de crianças, das idades e da duração. Conte esses dados no WhatsApp e a equipe monta a proposta.",
         },
       ],
+      fotoId: "equipeCarnaval",
       foto: "Evento com muitas crianças e várias estações de brincadeira",
     },
   },

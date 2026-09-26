@@ -9,11 +9,12 @@ Dono da empresa: **Paulino**. O site está sendo feito **de surpresa** para ele:
 - `lazer-produto`: contexto do negócio, módulos, modelo de dados, LGPD
 - `lazer-operacao`: disponibilidade, escala sugerida, kits, fardas, financeiro
 - `lazer-assistente-whatsapp`: persona, fluxo e regras da assistente
-- `direcao-criativa-web`, `arquitetura-de-conversao`, `construcao-site-premium`: padrão de qualidade de todos os sites do Arthur (tema escuro obrigatório)
+- `direcao-criativa-web`, `arquitetura-de-conversao`, `construcao-site-premium`: padrão de qualidade de todos os sites do Arthur (a regra de tema escuro delas tem exceção aqui, ver abaixo)
 
 ## Regras que não mudam
 
-- **Tema escuro** em tudo (site, portal, painel). Nenhuma seção, card grande, modal ou campo com fundo claro.
+- **Site público em tema CLARO** (pedido explícito do Arthur em 26/09/2026: "o site é para crianças", o escuro ficou pesado). Creme como a farda branca, seções amarelo-sol e vermelho, confete e bandeirinhas. Amarelo nunca é cor de texto: textos de destaque usam `--realce` (vermelho). A assinatura continua: camada dupla do L, faixas da farda e bonequinho.
+- Portal do recreador e painel: tema **a decidir com o Arthur** antes da fatia 3 (o padrão das skills é escuro).
 - **Nada herdado do site antigo** (removido no commit que criou este arquivo; o original está no histórico, commit `5b8a841`).
 - **Nunca inventar prova**: nada de depoimento, número, foto ou recreador fictício em página pública. Conteúdo que depende de material real usa o componente `<Pendente>` (buscar por `<Pendente` para listar).
 - Recreadores e depoimentos do site antigo eram **fictícios**: nunca reaproveitar.
@@ -46,7 +47,10 @@ Dono da empresa: **Paulino**. O site está sendo feito **de surpresa** para ele:
 - **Revisão de recreador**: faixas de idade, espaço (pequeno/amplo) e descrições de cada brincadeira, e os textos das páginas de evento (`servicos.ts` → `pagina`), são uma proposta inicial do Claude. O Arthur revisa com a equipe.
 - Se dá para estender a duração além de 3 h (a FAQ diz que sim).
 - CNPJ e razão social (política de privacidade).
-- Fotos reais do Instagram para o hero e a galeria. O Arthur vai exportar uma seleção.
+- **Fotos**: as 9 fotos em `src/assets/fotos/` são recortes de capturas de tela do Instagram (baixa resolução, 350 a 900 px). Trocar pelos originais quando alguém com acesso à conta exportar os arquivos (Instagram → Central de Contas → Suas informações → Baixar suas informações). Mantenha os mesmos nomes de arquivo e a troca é automática.
+- **Vídeos**: sem originais ainda. Opção enquanto isso: incorporar Reels pelo link, com carregamento só no clique (sem rastreamento antes do consentimento). Pedir ao Arthur os links dos Reels.
+- **Depoimento real** no Instagram (print de WhatsApp de uma cliente, "a equipe foi p... do início ao fim"): pedir o texto completo e a autorização para usar num bloco de depoimentos.
+- Páginas sem foto real ainda: espaço kids em casamentos e eventos corporativos.
 - Não há perfil no Google: criar o Perfil de Empresa no Google é prioridade de negócio (avaliações reais para o site).
 
 ## Decisões de arquitetura (aprovadas em 25/09/2026)

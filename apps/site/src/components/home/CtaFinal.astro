@@ -12,7 +12,7 @@ const { mensagem = mensagemGeral() } = Astro.props;
 
 <section class="secao cta-final" aria-labelledby="cta-final-titulo" data-esconde-cta-fixo>
   <div class="container">
-    <div class="camada camada--vermelha cta-final__caixa revela">
+    <div class="camada cta-final__caixa revela">
       <div class="cta-final__texto">
         <h2 id="cta-final-titulo" class="display cta-final__titulo">
           Chama a <span class="destaque">Lazer.</span>
@@ -48,9 +48,8 @@ const { mensagem = mensagemGeral() } = Astro.props;
     align-items: center;
     margin-left: var(--layer);
     padding: clamp(2rem, 1rem + 4vw, 4.5rem);
-    background:
-      radial-gradient(40rem 20rem at 100% 0%, oklch(40% 0.14 28 / 0.55), transparent 70%),
-      var(--surface-2);
+    background: var(--red);
+    color: var(--on-red);
     overflow: hidden;
   }
   @media (min-width: 48rem) {
@@ -66,9 +65,17 @@ const { mensagem = mensagemGeral() } = Astro.props;
   .cta-final__titulo {
     font-size: var(--step-5);
   }
+  .cta-final__titulo .destaque {
+    color: var(--brand-yellow);
+    text-shadow: -0.06em 0.06em 0 var(--brand-ink);
+  }
+  .cta-final__caixa :global(.texto-apoio) {
+    color: var(--on-red);
+  }
   .cta-final__micro {
     font-size: var(--step--1);
-    color: var(--text-subtle);
+    color: var(--on-red);
+    opacity: 0.9;
   }
   .cta-final__boneco {
     width: clamp(8rem, 6rem + 8vw, 13rem);

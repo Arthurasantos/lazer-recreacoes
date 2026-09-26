@@ -1,37 +1,42 @@
 /*
  * Lazer Recreações — tokens visuais
  * Direção criativa: "Camada Dupla" (ver docs/direcao-criativa.md)
- * Tema escuro obrigatório. Cores da marca medidas no logo oficial.
+ * Site público em tema claro (pedido do Arthur, 26/09/2026). Cores da marca medidas no logo oficial.
  */
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 
   /* Marca (valores exatos do logo) */
   --brand-red: #e3050f;
   --brand-yellow: #fdf305;
   --brand-ink: #140608; /* contorno preto do logo */
-  --brand-cream: oklch(95.5% 0.015 75); /* texto do logo no escuro */
+  --brand-cream: oklch(99% 0.012 95); /* branco da farda */
+  --logo-texto: var(--brand-ink);
 
-  /* Superfícies: vinho profundo derivado do vermelho da marca */
-  --bg-deep: oklch(12.5% 0.03 20);
-  --bg: oklch(15.5% 0.038 20);
-  --surface-1: oklch(20% 0.048 22);
-  --surface-2: oklch(25% 0.058 24);
-  --surface-3: oklch(30% 0.065 25);
-  --border: oklch(100% 0 0 / 0.1);
-  --border-strong: oklch(100% 0 0 / 0.2);
+  /* Superfícies: creme e sol, como a farda branca com faixas vermelho e amarelo.
+     Tema claro no site público por pedido explícito do Arthur (26/09/2026): o site é para crianças. */
+  --bg: oklch(98.4% 0.02 95); /* creme */
+  --bg-deep: oklch(95.5% 0.075 100); /* amarelo-sol claro (faixas de seção, rodapé) */
+  --sol: oklch(93% 0.15 103); /* amarelo forte para seções de destaque */
+  --surface-1: oklch(100% 0 0); /* cards */
+  --surface-2: oklch(97.5% 0.025 95);
+  --surface-3: oklch(94% 0.045 95);
+  --border: oklch(22% 0.04 20 / 0.12);
+  --border-strong: oklch(22% 0.04 20 / 0.28);
 
   /* Texto */
-  --text: oklch(95% 0.012 75);
-  --text-muted: oklch(80% 0.025 50);
-  --text-subtle: oklch(70% 0.03 40);
+  --text: oklch(21% 0.045 20);
+  --text-muted: oklch(37% 0.05 25);
+  --text-subtle: oklch(46% 0.05 25);
 
-  /* Ação: o amarelo é reservado para CTA e destaques pequenos */
-  --accent: oklch(91% 0.19 104);
-  --accent-hover: oklch(95% 0.2 106);
-  --accent-ink: oklch(17% 0.045 20);
-  --red: oklch(60% 0.235 28);
-  --red-bright: oklch(66% 0.22 28); /* vermelho legível sobre o vinho */
+  /* Ação: botão amarelo com contorno preto e camada vermelha */
+  --accent: oklch(93.5% 0.2 106);
+  --accent-hover: oklch(96% 0.19 106);
+  --accent-ink: var(--brand-ink);
+  --red: oklch(58.5% 0.235 28);
+  --red-bright: oklch(50% 0.21 28); /* vermelho de texto pequeno (contraste AA no creme) */
+  --realce: oklch(52% 0.215 28); /* textos de destaque: sobretítulos, links, números */
+  --on-red: oklch(99% 0.01 95);
 
   /* Assinatura: camada dupla (a camada de trás desce para a esquerda, como no L) */
   --layer: clamp(0.5rem, 0.35rem + 0.5vw, 0.8rem);

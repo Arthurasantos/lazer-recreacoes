@@ -99,12 +99,12 @@ import { linkWhatsApp, mensagemServico } from "../../lib/whatsapp";
   }
   .eventos__card--grande {
     --camada-cor: var(--red);
-    background: var(--surface-2);
+    background: var(--sol);
   }
   .eventos__numero {
     font-size: var(--step-3);
     color: transparent;
-    -webkit-text-stroke: 1.5px var(--accent);
+    -webkit-text-stroke: 1.5px var(--realce);
   }
   .eventos__card h3 {
     font-size: var(--step-2);
@@ -122,7 +122,7 @@ import { linkWhatsApp, mensagemServico } from "../../lib/whatsapp";
   .eventos__link {
     padding-block: var(--space-xs);
     font-weight: 750;
-    color: var(--accent);
+    color: var(--realce);
     text-decoration: none;
   }
   /* O card inteiro leva à página do evento, mantendo um único link acessível */
@@ -136,7 +136,7 @@ import { linkWhatsApp, mensagemServico } from "../../lib/whatsapp";
     outline: none;
   }
   .eventos__card:has(.eventos__link:focus-visible) {
-    outline: 3px solid var(--accent);
+    outline: 3px solid var(--realce);
     outline-offset: 4px;
   }
   /* Atalho do WhatsApp fica acima do link do card */

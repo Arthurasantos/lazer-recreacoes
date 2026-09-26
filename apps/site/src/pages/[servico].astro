@@ -8,6 +8,7 @@ import Base from "../layouts/Base.astro";
 import Bonequinho from "../components/Bonequinho.astro";
 import CartaoBrincadeira from "../components/CartaoBrincadeira.astro";
 import IconeWhatsApp from "../components/IconeWhatsApp.astro";
+import Foto from "../components/Foto.astro";
 import Pendente from "../components/Pendente.astro";
 import ComoFunciona from "../components/home/ComoFunciona.astro";
 import CtaFinal from "../components/home/CtaFinal.astro";
@@ -15,6 +16,7 @@ import Duvidas from "../components/home/Duvidas.astro";
 import MonteSuaFesta from "../components/home/MonteSuaFesta.astro";
 import { brincadeiras } from "../data/brincadeiras";
 import { empresa } from "../data/empresa";
+import { fotos } from "../data/fotos";
 import { perguntasPorId } from "../data/faq";
 import { servicos, type Servico } from "../data/servicos";
 import { linkWhatsApp, mensagemServico } from "../lib/whatsapp";
@@ -124,7 +126,11 @@ const jsonLd = [
       </div>
       <div class="servico-hero__midia">
         <figure class="camada servico-hero__foto">
-          <Pendente rotulo="Foto real do Instagram" detalhe={pagina.foto} />
+          {pagina.fotoId ? (
+            <Foto foto={fotos[pagina.fotoId]} sizes="(min-width: 60rem) 24rem, 90vw" prioridade />
+          ) : (
+            <Pendente rotulo="Foto real do Instagram" detalhe={pagina.foto} />
+          )}
         </figure>
         <div class="servico-hero__boneco" data-boneco-pula>
           <Bonequinho pose="acena" desenhar olhar />
@@ -239,10 +245,11 @@ const jsonLd = [
   }
   .servico-hero__foto {
     margin: 0;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1;
     rotate: -2deg;
   }
-  .servico-hero__foto :global(.pendente) {
+  .servico-hero__foto :global(.pendente),
+  .servico-hero__foto :global(.foto-quadro) {
     border-radius: calc(var(--radius-l) - var(--outline));
   }
   .servico-hero__boneco {
@@ -283,8 +290,8 @@ const jsonLd = [
   .pontos__numero {
     font-size: var(--step-4);
     line-height: 0.9;
-    color: var(--accent);
-    text-shadow: calc(var(--layer-sm) * -1) var(--layer-sm) 0 var(--red);
+    color: var(--realce);
+    text-shadow: calc(var(--layer-sm) * -1) var(--layer-sm) 0 var(--brand-yellow);
   }
   .pontos__card h3 {
     font-size: var(--step-2);
@@ -348,7 +355,7 @@ const jsonLd = [
       color var(--dur-ui) var(--ease-out);
   }
   .outros__lista a:hover {
-    border-color: var(--accent);
-    color: var(--accent);
+    border-color: var(--realce);
+    color: var(--realce);
   }
 </style>

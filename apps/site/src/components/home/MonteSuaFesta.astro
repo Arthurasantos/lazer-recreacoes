@@ -277,14 +277,13 @@ const tipos = [
   }
   .monte__input:focus-visible {
     outline: none;
-    border-color: var(--accent);
+    border-color: var(--realce);
     background: var(--surface-3);
   }
   .monte__input[aria-invalid="true"] {
     border-color: var(--red-bright);
   }
   .monte__input::-webkit-calendar-picker-indicator {
-    filter: invert(0.9) sepia(0.4) saturate(3) hue-rotate(5deg);
     cursor: pointer;
   }
 
@@ -329,7 +328,7 @@ const tipos = [
     translate: 1px -1px;
   }
   .monte__chip input:focus-visible + span {
-    outline: 3px solid var(--accent);
+    outline: 3px solid var(--realce);
     outline-offset: 3px;
   }
 
@@ -361,7 +360,7 @@ const tipos = [
     cursor: pointer;
   }
   .monte__passo:hover {
-    border-color: var(--accent);
+    border-color: var(--realce);
   }
   .monte__passo:active {
     background: var(--surface-3);
@@ -380,7 +379,7 @@ const tipos = [
     padding: var(--space-m);
     border-radius: var(--radius-m);
     border: 1px dashed var(--border-strong);
-    background: oklch(12% 0.03 20 / 0.6);
+    background: var(--surface-2);
   }
   .monte__previa-rotulo {
     font-size: 0.75rem;

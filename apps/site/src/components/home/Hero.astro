@@ -1,7 +1,8 @@
 ---
 import Bonequinho from "../Bonequinho.astro";
 import IconeWhatsApp from "../IconeWhatsApp.astro";
-import Pendente from "../Pendente.astro";
+import Foto from "../Foto.astro";
+import { fotos } from "../../data/fotos";
 import { empresa } from "../../data/empresa";
 import { anosDesde } from "../../lib/anos";
 import { linkWhatsApp, mensagemGeral } from "../../lib/whatsapp";
@@ -9,7 +10,7 @@ import { linkWhatsApp, mensagemGeral } from "../../lib/whatsapp";
 const anos = anosDesde(empresa.fundacao);
 ---
 
-<section class="hero" data-hero aria-labelledby="hero-titulo">
+<section class="hero confete" data-hero aria-labelledby="hero-titulo">
   <div class="container hero__grade">
     <div class="hero__texto">
       <p class="sobretitulo">Recreação infantil · desde 1995</p>
@@ -45,10 +46,7 @@ const anos = anosDesde(empresa.fundacao);
 
     <div class="hero__midia">
       <figure class="camada hero__foto">
-        <Pendente
-          rotulo="Foto real do Instagram"
-          detalhe="Recreador fardado brincando com crianças, formato vertical"
-        />
+        <Foto foto={fotos.lego} sizes="(min-width: 60rem) 26rem, 90vw" prioridade />
       </figure>
       <div class="hero__boneco" data-boneco-pula>
         <Bonequinho pose="acena" desenhar olhar rotulo="Bonequinho da Lazer acenando" />
@@ -124,11 +122,11 @@ const anos = anosDesde(empresa.fundacao);
   }
   .hero__foto {
     margin: 0;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 1;
     overflow: visible;
     rotate: 2deg;
   }
-  .hero__foto > :global(.pendente) {
+  .hero__foto > :global(.foto-quadro) {
     border-radius: calc(var(--radius-l) - var(--outline));
   }
   .hero__boneco {
@@ -138,7 +136,7 @@ const anos = anosDesde(empresa.fundacao);
     width: clamp(6.5rem, 5rem + 6vw, 9rem);
     rotate: 8deg;
     cursor: pointer;
-    filter: drop-shadow(0 10px 20px oklch(0% 0 0 / 0.35));
+    filter: drop-shadow(0 10px 20px oklch(22% 0.04 20 / 0.2));
   }
   @media (min-width: 60rem) {
     .hero__boneco {

@@ -1,5 +1,7 @@
 # Direção criativa: Camada Dupla
 
+> **Atualização de 26/09/2026: versão "dia de festa" (tema claro).** O Arthur achou o site escuro demais para um público de crianças e pediu explicitamente para clarear. A direção Camada Dupla continua (L em camadas, faixas da farda, bonequinho, Fraunces itálico), agora sobre creme (a farda branca), com seções em amarelo-sol e vermelho, confete e bandeirinhas de festa no topo das seções coloridas. Regras: amarelo só como fundo ou botão (nunca texto); destaques de texto em vermelho com camada amarela e contorno preto, como o logo; fotos reais do Instagram no hero, na galeria e nas páginas de evento. Tokens em `packages/tokens/tokens.css`.
+
 Aprovada pelo Arthur em 25/09/2026. Skills: `direcao-criativa-web` → `arquitetura-de-conversao` → `construcao-site-premium`.
 
 ## Briefing

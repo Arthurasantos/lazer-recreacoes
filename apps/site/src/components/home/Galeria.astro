@@ -1,14 +1,18 @@
 ---
-import Pendente from "../Pendente.astro";
+import Foto from "../Foto.astro";
 import { empresa } from "../../data/empresa";
+import { fotos } from "../../data/fotos";
 
 const molduras = [
-  { giro: -3, detalhe: "Parabéns com a equipe" },
-  { giro: 2, detalhe: "Pintura facial" },
-  { giro: -1.5, detalhe: "Gincana em área externa" },
-  { giro: 3, detalhe: "Colônia de férias" },
-  { giro: -2, detalhe: "Espaço kids" },
-  { giro: 1.5, detalhe: "Equipe fardada reunida" },
+  { foto: fotos.equipeCarnaval, giro: -3, camada: "vermelha" },
+  { foto: fotos.senna, giro: 2 },
+  { foto: fotos.harryPotter, giro: -1.5 },
+  { foto: fotos.risadas, giro: 3 },
+  { foto: fotos.futebolRecreadores, giro: -2, camada: "vermelha" },
+  { foto: fotos.inflavelPraia, giro: 1.5 },
+  { foto: fotos.futebolTurma, giro: 2.5 },
+  { foto: fotos.equipeBrasil, giro: -2.5 },
+  { foto: fotos.lego, giro: 1, camada: "vermelha" },
 ];
 ---
 
@@ -33,8 +37,14 @@ const molduras = [
     <ul class="galeria__grade" role="list">
       {molduras.map((m, i) => (
         <li class="revela" style={`--i: ${i % 3}`}>
-          <figure class="camada camada--interativa galeria__foto" style={`rotate: ${m.giro}deg`}>
-            <Pendente rotulo="Foto do Instagram" detalhe={m.detalhe} />
+          <figure
+            class:list={[
+              "camada camada--interativa galeria__foto",
+              { "camada--vermelha": m.camada === "vermelha" },
+            ]}
+            style={`rotate: ${m.giro}deg`}
+          >
+            <Foto foto={m.foto} sizes="(min-width: 60rem) 24rem, 45vw" />
           </figure>
         </li>
       ))}
@@ -67,9 +77,17 @@ const molduras = [
     margin: 0;
     aspect-ratio: 1;
   }
-  .galeria__foto :global(.pendente) {
+  /* No celular (2 colunas), a última foto de uma lista ímpar ocupa a linha toda */
+  @media (max-width: 59.99rem) {
+    .galeria__grade > li:last-child:nth-child(odd) {
+      grid-column: 1 / -1;
+    }
+    .galeria__grade > li:last-child:nth-child(odd) .galeria__foto {
+      aspect-ratio: 2 / 1;
+    }
+  }
+  .galeria__foto :global(.foto-quadro) {
     border-radius: calc(var(--radius-l) - var(--outline));
-    min-height: 0;
-    padding: var(--space-s);
+    overflow: hidden;
   }
 </style>

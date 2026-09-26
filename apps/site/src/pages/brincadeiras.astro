@@ -279,7 +279,7 @@ const grupos = [
     box-shadow: -3px 3px 0 var(--red);
   }
   .filtros__chip input:focus-visible + span {
-    outline: 3px solid var(--accent);
+    outline: 3px solid var(--realce);
     outline-offset: 3px;
   }
 
@@ -327,7 +327,7 @@ const grupos = [
     color: var(--text-muted);
   }
   .catalogo__nota a {
-    color: var(--accent);
+    color: var(--realce);
     font-weight: 700;
     text-underline-offset: 0.2em;
   }
@@ -336,7 +336,8 @@ const grupos = [
     position: fixed;
     inset: auto 0 0;
     z-index: 60;
-    background: oklch(14% 0.035 20 / 0.94);
+    background: oklch(99% 0.012 95 / 0.95);
+    box-shadow: 0 -6px 24px oklch(22% 0.04 20 / 0.12);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     padding-bottom: env(safe-area-inset-bottom);

@@ -2,7 +2,7 @@
 /**
  * Logo oficial vetorizado a partir do arquivo enviado pelo Arthur.
  * As duas camadas do L são grupos separados para permitir a animação de montagem.
- * O texto usa creme (versão para fundo escuro); o contorno preto do L é mantido.
+ * O texto usa a cor do token --logo-texto (preto do logo no fundo claro).
  */
 interface Props {
   class?: string;
@@ -65,6 +65,6 @@ const { class: classe, titulo = "Lazer Recreações", ...resto } = Astro.props;
     transform: translate(var(--dx), var(--dy));
   }
   .logo__word {
-    fill: var(--brand-cream, #f6efe6);
+    fill: var(--logo-texto, #140608);
   }
 </style>
