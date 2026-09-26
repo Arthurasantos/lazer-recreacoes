@@ -1,0 +1,122 @@
+---
+import { empresa } from "../../data/empresa";
+import { servicos } from "../../data/servicos";
+import { anosDesde } from "../../lib/anos";
+
+const anos = anosDesde(empresa.fundacao);
+const provas = [
+  {
+    numero: String(anos),
+    dinamico: true,
+    unidade: "anos",
+    texto: "brincando com o Recife, desde 1995",
+  },
+  { numero: "EUA", unidade: "", texto: "a Lazer já levou a festa até os Estados Unidos" },
+  {
+    numero: `R$ ${empresa.precoAPartirDe}`,
+    unidade: "",
+    texto: "é o ponto de partida: 1 recreador por 3 horas, no Recife",
+  },
+];
+const palavras = [...servicos.map((s) => s.titulo), empresa.slogan];
+---
+
+<section class="credenciais" aria-label="Credenciais da Lazer">
+  <span class="faixas" aria-hidden="true"></span>
+  <div class="container credenciais__grade">
+    {provas.map((p, i) => (
+      <div class="credenciais__item revela" style={`--i: ${i}`}>
+        <p class="credenciais__numero display">
+          {p.dinamico ? <span data-anos>{p.numero}</span> : p.numero}
+          {p.unidade && <span class="credenciais__unidade"> {p.unidade}</span>}
+        </p>
+        <p class="credenciais__texto">{p.texto}</p>
+      </div>
+    ))}
+  </div>
+  <div class="letreiro" aria-hidden="true">
+    <div class="letreiro__trilho">
+      {[0, 1].map(() => (
+        <p class="letreiro__grupo display">
+          {palavras.map((p) => (
+            <>
+              <span>{p}</span>
+              <span class="letreiro__estrela">✦</span>
+            </>
+          ))}
+        </p>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .credenciais {
+    background: var(--sol);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .credenciais__grade {
+    display: grid;
+    gap: var(--space-xl);
+    padding-block: var(--space-2xl) var(--space-xl);
+  }
+  @media (min-width: 48rem) {
+    .credenciais__grade {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .credenciais__item {
+    display: grid;
+    gap: var(--space-2xs);
+    padding-left: var(--space-l);
+    border-left: 3px solid var(--red);
+  }
+  .credenciais__numero {
+    font-size: var(--step-4);
+    color: var(--realce);
+  }
+  .credenciais__unidade {
+    font-size: 0.5em;
+    color: var(--text);
+  }
+  .credenciais__texto {
+    color: var(--text);
+    max-width: 26ch;
+  }
+
+  .letreiro {
+    padding-block: var(--space-l) var(--space-xl);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .letreiro__trilho {
+    display: flex;
+    width: max-content;
+  }
+  .letreiro__grupo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-l);
+    padding-right: var(--space-l);
+    font-size: var(--step-3);
+    white-space: nowrap;
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--text);
+  }
+  .letreiro__estrela {
+    color: var(--red);
+    -webkit-text-stroke: 0;
+    font-style: normal;
+    font-size: 0.6em;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .letreiro__trilho {
+      animation: letreiro 38s linear infinite;
+    }
+  }
+  @keyframes letreiro {
+    to {
+      translate: -50% 0;
+    }
+  }
+</style>

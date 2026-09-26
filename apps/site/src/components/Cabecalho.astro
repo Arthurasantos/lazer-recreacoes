@@ -1,0 +1,144 @@
+---
+import Logo from "./Logo.astro";
+import IconeWhatsApp from "./IconeWhatsApp.astro";
+import { linkWhatsApp, mensagemGeral } from "../lib/whatsapp";
+
+interface Props {
+  mensagem?: string;
+}
+const { mensagem = mensagemGeral() } = Astro.props;
+
+const links = [
+  { href: "/#eventos", texto: "Eventos" },
+  { href: "/brincadeiras", texto: "Brincadeiras" },
+  { href: "/#como-funciona", texto: "Como funciona" },
+  { href: "/#monte-sua-festa", texto: "Monte sua festa" },
+  { href: "/#duvidas", texto: "Dúvidas" },
+];
+---
+
+<header class="cabecalho" data-cabecalho>
+  <div class="container cabecalho__linha">
+    <a href="/" class="cabecalho__marca" aria-label="Lazer Recreações, página inicial">
+      <Logo class="cabecalho__logo" />
+    </a>
+    <nav class="cabecalho__nav" aria-label="Seções do site">
+      <ul>
+        {links.map((l) => (
+          <li>
+            <a href={l.href}>{l.texto}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <a
+      class="botao cabecalho__cta"
+      href={linkWhatsApp(mensagem)}
+      target="_blank"
+      rel="noopener"
+      data-evento="whatsapp_cabecalho"
+    >
+      <IconeWhatsApp />
+      <span>
+        Orçamento<span class="cabecalho__cta-extra"> no WhatsApp</span>
+      </span>
+    </a>
+  </div>
+</header>
+
+<style>
+  .cabecalho {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    padding-block: var(--space-s);
+    transition:
+      background-color var(--dur-ui) var(--ease-out),
+      border-color var(--dur-ui) var(--ease-out);
+    border-bottom: 1px solid transparent;
+  }
+  .cabecalho.is-rolado {
+    background: oklch(98.4% 0.02 95 / 0.9);
+    backdrop-filter: blur(14px) saturate(1.2);
+    -webkit-backdrop-filter: blur(14px) saturate(1.2);
+    border-bottom-color: var(--border);
+  }
+  .cabecalho__linha {
+    display: flex;
+    align-items: center;
+    gap: var(--space-l);
+  }
+  .cabecalho__marca {
+    display: block;
+    border-radius: var(--radius-s);
+    margin-right: auto;
+  }
+  .cabecalho__logo {
+    width: clamp(7.5rem, 6rem + 5vw, 10rem);
+  }
+  .cabecalho__nav ul {
+    display: none;
+    gap: var(--space-l);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .cabecalho__nav a {
+    display: inline-block;
+    padding-block: var(--space-xs);
+    font-weight: 600;
+    font-size: var(--step--1);
+    color: var(--text-muted);
+    text-decoration: none;
+    background: linear-gradient(var(--accent), var(--accent)) no-repeat left bottom / 0 2px;
+    transition:
+      color var(--dur-ui) var(--ease-out),
+      background-size var(--dur-ui) var(--ease-out);
+  }
+  .cabecalho__nav a:hover {
+    color: var(--text);
+    background-size: 100% 2px;
+  }
+  .cabecalho__cta {
+    min-height: 2.75rem;
+    padding: 0.5rem 0.9rem;
+    font-size: var(--step--1);
+  }
+  .cabecalho__cta-extra {
+    display: none;
+  }
+  @media (min-width: 60rem) {
+    .cabecalho__nav ul {
+      display: flex;
+    }
+  }
+  @media (min-width: 30rem) {
+    .cabecalho__cta-extra {
+      display: inline;
+    }
+  }
+
+  /* Montagem do L ao carregar: a camada amarela "sai" de trás da vermelha */
+  @media (prefers-reduced-motion: no-preference) {
+    .cabecalho__logo :global(.logo__back) {
+      animation: logo-camada 900ms var(--ease-bounce) 150ms both;
+    }
+    .cabecalho__logo :global(.logo__word) {
+      animation: logo-texto 700ms var(--ease-out) 450ms both;
+    }
+    .cabecalho__marca:hover :global(.logo__back) {
+      animation: logo-camada 700ms var(--ease-bounce) both;
+    }
+  }
+  @keyframes logo-camada {
+    from {
+      transform: translate(0, 0);
+    }
+  }
+  @keyframes logo-texto {
+    from {
+      opacity: 0;
+      transform: translateX(-24px);
+    }
+  }
+</style>

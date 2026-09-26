@@ -1,0 +1,507 @@
+---
+import Bonequinho from "../Bonequinho.astro";
+import IconeWhatsApp from "../IconeWhatsApp.astro";
+import { empresa } from "../../data/empresa";
+import { linkWhatsApp, mensagemGeral } from "../../lib/whatsapp";
+
+interface Props {
+  /** Tipo de evento já marcado (páginas de evento) */
+  tipoInicial?: string;
+}
+const { tipoInicial } = Astro.props;
+
+const tipos = [
+  "Aniversário",
+  "Colônia de férias",
+  "Brincadeiras em casa",
+  "Casamento",
+  "Evento corporativo",
+  "Outro evento",
+];
+---
+
+<section
+  id="monte-sua-festa"
+  class="secao secao--elevada monte"
+  aria-labelledby="monte-titulo"
+  data-esconde-cta-fixo
+>
+  <div class="container monte__grade">
+    <div class="monte__intro">
+      <p class="sobretitulo revela">Monte sua festa</p>
+      <h2 id="monte-titulo" class="display titulo-secao revela">
+        Sua festa em <span class="destaque">30 segundos.</span>
+      </h2>
+      <p class="texto-apoio revela">
+        Responda o básico e a mensagem chega prontinha no WhatsApp do {empresa.whatsapp.contato}.
+        Nada fica salvo no site: você revisa tudo antes de enviar.
+      </p>
+      <div class="monte__boneco" data-monte-boneco data-boneco-pula>
+        <Bonequinho pose="acena" />
+        <p class="monte__balao" data-monte-balao aria-live="polite">
+          Bora montar?
+        </p>
+      </div>
+    </div>
+
+    <form class="camada monte__form" data-monte-form novalidate>
+      <fieldset class="monte__campo">
+        <legend class="monte__rotulo">
+          Qual é o evento? <span class="monte__req">obrigatório</span>
+        </legend>
+        <div class="monte__chips">
+          {tipos.map((t) => (
+            <label class="monte__chip">
+              <input type="radio" name="tipo" value={t} required checked={t === tipoInicial} />
+              <span>{t}</span>
+            </label>
+          ))}
+        </div>
+        <p class="monte__erro" id="erro-tipo" hidden>
+          Escolha o tipo de evento.
+        </p>
+      </fieldset>
+
+      <div class="monte__linha">
+        <label class="monte__campo">
+          <span class="monte__rotulo">
+            Data da festa <span class="monte__req">obrigatório</span>
+          </span>
+          <input
+            class="monte__input"
+            type="date"
+            name="data"
+            required
+            aria-describedby="erro-data"
+            data-monte-data
+          />
+          <span class="monte__erro" id="erro-data" hidden>
+            Informe a data (pode ser aproximada).
+          </span>
+        </label>
+
+        <div class="monte__campo">
+          <label class="monte__rotulo" for="monte-criancas">
+            Quantas crianças, mais ou menos?
+          </label>
+          <div class="monte__contador">
+            <button
+              type="button"
+              class="monte__passo"
+              data-passo="-5"
+              aria-label="Menos 5 crianças"
+            >
+              −
+            </button>
+            <input
+              class="monte__input"
+              id="monte-criancas"
+              type="number"
+              name="criancas"
+              inputmode="numeric"
+              min="1"
+              max="999"
+              value="15"
+            />
+            <button type="button" class="monte__passo" data-passo="5" aria-label="Mais 5 crianças">
+              +
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <label class="monte__campo">
+        <span class="monte__rotulo">
+          Onde vai ser? <span class="monte__req">obrigatório</span>
+        </span>
+        <input
+          class="monte__input"
+          type="text"
+          name="local"
+          required
+          autocomplete="off"
+          placeholder="Bairro e cidade. Ex.: Boa Viagem, Recife"
+          aria-describedby="erro-local"
+        />
+        <span class="monte__erro" id="erro-local" hidden>
+          Conte o bairro e a cidade.
+        </span>
+      </label>
+
+      <label class="monte__campo">
+        <span class="monte__rotulo">Idades</span>
+        <input
+          class="monte__input"
+          type="text"
+          name="idades"
+          autocomplete="off"
+          placeholder="Ex.: aniversariante faz 6; convidados de 3 a 10"
+        />
+      </label>
+
+      <label class="monte__campo">
+        <span class="monte__rotulo">Seu nome</span>
+        <input
+          class="monte__input"
+          type="text"
+          name="nome"
+          autocomplete="given-name"
+          placeholder="Opcional"
+        />
+      </label>
+
+      <div class="monte__previa">
+        <p class="monte__previa-rotulo">Prévia da mensagem</p>
+        <p class="monte__previa-texto" data-monte-previa></p>
+      </div>
+
+      <button
+        class="botao botao--grande monte__enviar"
+        type="submit"
+        data-evento="whatsapp_formulario"
+      >
+        <IconeWhatsApp />
+        Enviar pelo WhatsApp
+      </button>
+      <p class="monte__micro">
+        Abre o WhatsApp com a mensagem pronta. Nenhum dado fica salvo no site.
+      </p>
+      <noscript>
+        <p class="monte__micro">
+          Seu navegador está sem JavaScript.{" "}
+          <a href={linkWhatsApp(mensagemGeral())}>Chame direto no WhatsApp</a>.
+        </p>
+      </noscript>
+    </form>
+  </div>
+</section>
+
+<style>
+  .monte__grade {
+    display: grid;
+    gap: var(--space-2xl);
+    align-items: start;
+  }
+  @media (min-width: 60rem) {
+    .monte__grade {
+      grid-template-columns: 0.9fr 1.1fr;
+    }
+    .monte__intro {
+      position: sticky;
+      top: 7rem;
+    }
+  }
+  .monte__intro .texto-apoio {
+    margin-top: var(--space-l);
+  }
+  .monte__boneco {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--space-s);
+    margin-top: var(--space-xl);
+    cursor: pointer;
+  }
+  .monte__boneco :global(.boneco) {
+    width: clamp(6rem, 5rem + 4vw, 8.5rem);
+    flex: none;
+  }
+  .monte__balao {
+    position: relative;
+    margin-bottom: 4.5rem;
+    padding: 0.6rem 1rem;
+    border: var(--outline) solid var(--brand-ink);
+    border-radius: var(--radius-m) var(--radius-m) var(--radius-m) 0.2rem;
+    background: var(--brand-cream);
+    color: var(--accent-ink);
+    font-weight: 750;
+    box-shadow: -4px 4px 0 var(--red);
+    max-width: 16rem;
+    line-height: 1.35;
+  }
+
+  .monte__form {
+    display: grid;
+    gap: var(--space-l);
+    padding: clamp(1.25rem, 0.8rem + 2vw, 2.25rem);
+    margin-left: var(--layer);
+    background: var(--surface-1);
+  }
+  .monte__linha {
+    display: grid;
+    gap: var(--space-l);
+  }
+  @media (min-width: 36rem) {
+    .monte__linha {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .monte__campo {
+    display: grid;
+    gap: var(--space-xs);
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  .monte__rotulo {
+    padding: 0;
+    font-weight: 700;
+    font-size: var(--step--1);
+    color: var(--text);
+  }
+  .monte__req {
+    margin-left: 0.35rem;
+    font-weight: 500;
+    font-size: 0.85em;
+    color: var(--text-subtle);
+  }
+  .monte__input {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.7rem 0.9rem;
+    border: 2px solid var(--border-strong);
+    border-radius: var(--radius-s);
+    background: var(--surface-2);
+    color: var(--text);
+    font: inherit;
+    transition:
+      border-color var(--dur-ui) var(--ease-out),
+      background-color var(--dur-ui) var(--ease-out);
+  }
+  .monte__input::placeholder {
+    color: var(--text-subtle);
+    opacity: 1;
+  }
+  .monte__input:hover {
+    border-color: var(--text-subtle);
+  }
+  .monte__input:focus-visible {
+    outline: none;
+    border-color: var(--realce);
+    background: var(--surface-3);
+  }
+  .monte__input[aria-invalid="true"] {
+    border-color: var(--red-bright);
+  }
+  .monte__input::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+  }
+
+  .monte__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs);
+    margin-top: var(--space-2xs);
+  }
+  .monte__chip {
+    position: relative;
+  }
+  .monte__chip input {
+    position: absolute;
+    opacity: 0;
+    inset: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+  .monte__chip span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0.45rem 0.95rem;
+    border: 2px solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    font-weight: 600;
+    font-size: var(--step--1);
+    transition:
+      background-color var(--dur-ui) var(--ease-out),
+      border-color var(--dur-ui) var(--ease-out),
+      translate var(--dur-ui) var(--ease-bounce);
+  }
+  .monte__chip:hover span {
+    border-color: var(--text-subtle);
+  }
+  .monte__chip input:checked + span {
+    background: var(--accent);
+    border-color: var(--brand-ink);
+    color: var(--accent-ink);
+    box-shadow: -3px 3px 0 var(--red);
+    translate: 1px -1px;
+  }
+  .monte__chip input:focus-visible + span {
+    outline: 3px solid var(--realce);
+    outline-offset: 3px;
+  }
+
+  .monte__contador {
+    display: grid;
+    grid-template-columns: 3rem 1fr 3rem;
+    gap: var(--space-xs);
+  }
+  .monte__contador .monte__input {
+    text-align: center;
+    font-weight: 700;
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+  .monte__contador .monte__input::-webkit-inner-spin-button,
+  .monte__contador .monte__input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  .monte__passo {
+    min-height: 3rem;
+    border: 2px solid var(--border-strong);
+    border-radius: var(--radius-s);
+    background: var(--surface-2);
+    color: var(--text);
+    font: inherit;
+    font-size: 1.4rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .monte__passo:hover {
+    border-color: var(--realce);
+  }
+  .monte__passo:active {
+    background: var(--surface-3);
+  }
+
+  .monte__erro {
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--red-bright);
+  }
+  .monte__erro[hidden] {
+    display: none;
+  }
+
+  .monte__previa {
+    padding: var(--space-m);
+    border-radius: var(--radius-m);
+    border: 1px dashed var(--border-strong);
+    background: var(--surface-2);
+  }
+  .monte__previa-rotulo {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+    margin-bottom: var(--space-xs);
+  }
+  .monte__previa-texto {
+    white-space: pre-line;
+    font-size: var(--step--1);
+    color: var(--text-muted);
+    min-height: 3lh;
+  }
+  .monte__enviar {
+    width: 100%;
+  }
+  .monte__micro {
+    font-size: var(--step--1);
+    color: var(--text-subtle);
+    text-align: center;
+  }
+</style>
+
+<script>
+  import { linkWhatsApp, mensagemOrcamento, type DadosFesta } from "../../lib/whatsapp";
+
+  const form = document.querySelector<HTMLFormElement>("[data-monte-form]");
+  if (form) {
+    const previa = form.querySelector<HTMLElement>("[data-monte-previa]")!;
+    const data = form.querySelector<HTMLInputElement>("[data-monte-data]")!;
+    const criancas = form.querySelector<HTMLInputElement>("[name=criancas]")!;
+    const balao = document.querySelector<HTMLElement>("[data-monte-balao]");
+    const boneco = document.querySelector<SVGElement>("[data-monte-boneco] svg.boneco");
+
+    // A data mínima é hoje, calculada no navegador (o site é estático)
+    const hoje = new Date();
+    const pad = (n: number) => String(n).padStart(2, "0");
+    data.min = `${hoje.getFullYear()}-${pad(hoje.getMonth() + 1)}-${pad(hoje.getDate())}`;
+
+    const obrigatorios = ["tipo", "data", "local"] as const;
+    const erroDe = (nome: string) => form.querySelector<HTMLElement>(`#erro-${nome}`);
+
+    const ler = (): DadosFesta => {
+      const f = new FormData(form);
+      const texto = (k: string) => String(f.get(k) ?? "").trim();
+      return {
+        tipo: texto("tipo"),
+        data: texto("data"),
+        local: texto("local"),
+        criancas: texto("criancas"),
+        idades: texto("idades"),
+        nome: texto("nome"),
+      };
+    };
+
+    const faltando = (d: DadosFesta) => obrigatorios.filter((k) => !d[k]);
+
+    let completoAntes = false;
+    const falas = ["Bora montar?", "Boa! Faltam duas.", "Só mais uma!", "Prontinho! É só enviar."];
+
+    const atualiza = () => {
+      const d = ler();
+      previa.textContent = mensagemOrcamento(d);
+      const faltam = faltando(d).length;
+      if (balao) balao.textContent = falas[obrigatorios.length - faltam];
+      const completo = faltam === 0;
+      if (completo && !completoAntes && boneco) {
+        boneco.classList.remove("is-pulando");
+        void boneco.getBoundingClientRect();
+        boneco.classList.add("is-pulando");
+      }
+      completoAntes = completo;
+      // Limpa o erro assim que o campo é preenchido
+      for (const k of obrigatorios) {
+        if (d[k]) {
+          erroDe(k)?.setAttribute("hidden", "");
+          form.querySelector(`[name=${k}]`)?.removeAttribute("aria-invalid");
+        }
+      }
+    };
+
+    form.addEventListener("input", atualiza);
+    form.addEventListener("change", atualiza);
+
+    form.querySelectorAll<HTMLButtonElement>("[data-passo]").forEach((b) =>
+      b.addEventListener("click", () => {
+        const atual = Number(criancas.value) || 0;
+        const novo = Math.min(999, Math.max(1, atual + Number(b.dataset.passo)));
+        criancas.value = String(novo);
+        atualiza();
+      }),
+    );
+
+    form.addEventListener("submit", (ev) => {
+      ev.preventDefault();
+      const d = ler();
+      const falta = faltando(d);
+      for (const k of obrigatorios) {
+        const erro = erroDe(k);
+        const campo = form.querySelector<HTMLInputElement>(`[name=${k}]`);
+        const invalido = falta.includes(k);
+        erro?.toggleAttribute("hidden", !invalido);
+        if (campo && k !== "tipo") {
+          if (invalido) campo.setAttribute("aria-invalid", "true");
+          else campo.removeAttribute("aria-invalid");
+        }
+      }
+      if (falta.length) {
+        const primeiro = form.querySelector<HTMLInputElement>(`[name=${falta[0]}]`);
+        primeiro?.focus();
+        if (balao) balao.textContent = "Opa, faltou um detalhe!";
+        return;
+      }
+      const url = linkWhatsApp(mensagemOrcamento(d));
+      // Sem "noopener" no terceiro argumento: com ele, window.open sempre devolve null
+      const aba = window.open(url, "_blank");
+      if (aba) aba.opener = null;
+      else location.href = url;
+    });
+
+    atualiza();
+  }
+</script>

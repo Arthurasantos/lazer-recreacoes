@@ -1,0 +1,164 @@
+---
+import IconeWhatsApp from "../IconeWhatsApp.astro";
+import { servicos } from "../../data/servicos";
+import { linkWhatsApp, mensagemServico } from "../../lib/whatsapp";
+---
+
+<section id="eventos" class="secao secao--elevada eventos" aria-labelledby="eventos-titulo">
+  <div class="container">
+    <div class="eventos__topo">
+      <div>
+        <p class="sobretitulo revela">Eventos</p>
+        <h2 id="eventos-titulo" class="display titulo-secao revela">
+          Tem criança? <span class="destaque">Tem Lazer.</span>
+        </h2>
+      </div>
+      <p class="texto-apoio revela">
+        Escolha o tipo de evento para ver como a Lazer trabalha, ou chame direto no WhatsApp com a
+        mensagem pronta.
+      </p>
+    </div>
+
+    <ul class="eventos__grade" role="list">
+      {servicos.map((s, i) => (
+        <li class="revela" style={`--i: ${i % 3}`}>
+          <article
+            class:list={[
+              "camada camada--interativa eventos__card",
+              { "eventos__card--grande": i === 0 },
+            ]}
+          >
+            <span class="eventos__numero display" aria-hidden="true">
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <h3>{s.titulo}</h3>
+            <p>{s.resumo}</p>
+            <div class="eventos__acoes">
+              <a
+                class="eventos__link"
+                href={`/${s.slug}`}
+                aria-label={`Ver como funciona: ${s.titulo.toLowerCase()}`}
+              >
+                Ver como funciona
+                <span aria-hidden="true"> →</span>
+              </a>
+              <a
+                class="eventos__wpp"
+                href={linkWhatsApp(mensagemServico(s.pedido))}
+                target="_blank"
+                rel="noopener"
+                data-evento={`whatsapp_servico_${s.id}`}
+                aria-label={`Pedir orçamento para ${s.titulo.toLowerCase()} no WhatsApp`}
+              >
+                <IconeWhatsApp />
+              </a>
+            </div>
+          </article>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .eventos__topo {
+    display: grid;
+    gap: var(--space-l);
+    align-items: end;
+  }
+  @media (min-width: 60rem) {
+    .eventos__topo {
+      grid-template-columns: 1.2fr 1fr;
+    }
+  }
+  .eventos__grade {
+    display: grid;
+    gap: calc(var(--space-l) + var(--layer));
+    margin: var(--space-2xl) 0 0;
+    padding: 0 0 0 var(--layer);
+    list-style: none;
+  }
+  @media (min-width: 40rem) {
+    .eventos__grade {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 64rem) {
+    .eventos__grade {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .eventos__grade > li {
+    display: grid;
+  }
+  .eventos__card {
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap: var(--space-s);
+    padding: var(--space-xl);
+  }
+  .eventos__card--grande {
+    --camada-cor: var(--red);
+    background: var(--sol);
+  }
+  .eventos__numero {
+    font-size: var(--step-3);
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--realce);
+  }
+  .eventos__card h3 {
+    font-size: var(--step-2);
+  }
+  .eventos__card p {
+    color: var(--text-muted);
+  }
+  .eventos__acoes {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-m);
+    margin-top: var(--space-s);
+  }
+  .eventos__link {
+    padding-block: var(--space-xs);
+    font-weight: 750;
+    color: var(--realce);
+    text-decoration: none;
+  }
+  /* O card inteiro leva à página do evento, mantendo um único link acessível */
+  .eventos__link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+  .eventos__link:focus-visible {
+    outline: none;
+  }
+  .eventos__card:has(.eventos__link:focus-visible) {
+    outline: 3px solid var(--realce);
+    outline-offset: 4px;
+  }
+  /* Atalho do WhatsApp fica acima do link do card */
+  .eventos__wpp {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 2px solid var(--brand-ink);
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-ink);
+    box-shadow: -3px 3px 0 var(--red);
+    transition: translate var(--dur-ui) var(--ease-out);
+  }
+  .eventos__wpp svg {
+    width: 1.3rem;
+    height: 1.3rem;
+  }
+  .eventos__wpp:hover {
+    translate: 1px -1px;
+  }
+</style>

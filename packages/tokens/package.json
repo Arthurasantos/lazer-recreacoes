@@ -1,0 +1,9 @@
+{
+  "name": "@lazer/tokens",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Tokens visuais da Lazer Recreações (tema escuro, direção Camada Dupla).",
+  "exports": {
+    "./tokens.css": "./tokens.css"
+  }
+}

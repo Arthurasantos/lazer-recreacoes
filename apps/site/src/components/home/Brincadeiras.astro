@@ -1,0 +1,101 @@
+---
+/** Amostra do repertório. Lista vinda do site antigo; confirmar com o dono (ver CLAUDE.md). */
+const linhas = [
+  ["Gincana", "Caça ao tesouro", "Pintura facial", "Dança das cadeiras", "Corre cutia", "Estátua"],
+  [
+    "Batata quente",
+    "Cabo de guerra",
+    "Corrida do saco",
+    "Circuito de obstáculos",
+    "Brincadeira de roda",
+    "Mestre mandou",
+  ],
+];
+---
+
+<section class="brincadeiras" aria-labelledby="brincadeiras-titulo">
+  <div class="container brincadeiras__topo">
+    <p class="sobretitulo">Repertório</p>
+    <h2 id="brincadeiras-titulo" class="brincadeiras__titulo">
+      Das clássicas às que as crianças pedem de novo
+    </h2>
+  </div>
+  <div class="brincadeiras__linhas">
+    {linhas.map((linha, i) => (
+      <div class:list={["brincadeiras__linha", { "brincadeiras__linha--volta": i === 1 }]}>
+        <ul class="brincadeiras__trilho" role="list">
+          {[...linha, ...linha].map((b, j) => (
+            <li class="brincadeiras__chip" aria-hidden={j >= linha.length ? "true" : undefined}>
+              {b}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+</section>
+
+<style>
+  .brincadeiras {
+    padding-block: var(--space-2xl) var(--space-3xl);
+    overflow: hidden;
+    background: var(--red);
+    color: var(--on-red);
+  }
+  .brincadeiras .sobretitulo {
+    color: var(--brand-yellow);
+  }
+  .brincadeiras .sobretitulo::before {
+    background: var(--brand-yellow);
+  }
+  .brincadeiras__titulo {
+    font-size: var(--step-2);
+    max-width: 24ch;
+  }
+  .brincadeiras__linhas {
+    display: grid;
+    gap: var(--space-m);
+    margin-top: var(--space-xl);
+    rotate: -2deg;
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  }
+  .brincadeiras__linha {
+    overflow: hidden;
+  }
+  .brincadeiras__trilho {
+    display: flex;
+    gap: var(--space-m);
+    width: max-content;
+    margin: 0;
+    padding: var(--space-2xs) 0 var(--space-xs) var(--space-m);
+    list-style: none;
+  }
+  .brincadeiras__chip {
+    padding: 0.55rem 1.1rem;
+    border: var(--outline) solid var(--brand-ink);
+    border-radius: var(--radius-pill);
+    background: var(--surface-1);
+    color: var(--text);
+    box-shadow:
+      -4px 4px 0 0 var(--brand-yellow),
+      -4px 4px 0 var(--outline) var(--brand-ink);
+    font-weight: 650;
+    white-space: nowrap;
+  }
+  .brincadeiras__linha--volta .brincadeiras__chip {
+    box-shadow: -4px 4px 0 0 var(--brand-ink);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .brincadeiras__trilho {
+      animation: chips 30s linear infinite;
+    }
+    .brincadeiras__linha--volta .brincadeiras__trilho {
+      animation-direction: reverse;
+    }
+  }
+  @keyframes chips {
+    to {
+      translate: -50% 0;
+    }
+  }
+</style>

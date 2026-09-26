@@ -1,0 +1,205 @@
+---
+/**
+ * Bonequinho da Lazer: ativo oficial da marca (estampado na farda),
+ * redesenhado em traço para poder ser animado.
+ *
+ * Poses: "parado" | "acena" (braço balança) | "pula" (quica) | "anda" (balança o corpo).
+ * `desenhar` faz o traço aparecer como se fosse desenhado na hora.
+ * `olhar` faz as pupilas seguirem o ponteiro (só em telas com mouse).
+ */
+interface Props {
+  pose?: "parado" | "acena" | "pula" | "anda";
+  desenhar?: boolean;
+  olhar?: boolean;
+  class?: string;
+  rotulo?: string;
+}
+const {
+  pose = "parado",
+  desenhar = false,
+  olhar = false,
+  class: classe,
+  rotulo,
+  ...resto
+} = Astro.props;
+---
+
+<svg
+  class:list={["boneco", `boneco--${pose}`, { "boneco--desenhar": desenhar }, classe]}
+  data-boneco-olhar={olhar ? "" : undefined}
+  viewBox="50 40 390 490"
+  xmlns="http://www.w3.org/2000/svg"
+  role={rotulo ? "img" : undefined}
+  aria-label={rotulo}
+  aria-hidden={rotulo ? undefined : "true"}
+  {...resto}
+>
+  <path
+    class="boneco__pincel"
+    d="M158 62L300 56L405 72L418 118L398 150L416 196L402 248L414 300L396 340L408 392L384 424L398 470L372 508L250 514L96 506L72 470L92 436L70 396L104 360L84 318L118 280L102 236L136 196L118 150L142 110Z"
+  ></path>
+  <g class="boneco__corpo">
+    <g class="boneco__traco">
+      <circle class="boneco__rosto" cx="302" cy="196" r="88" pathLength="1"></circle>
+      <path d="M150 78Q205 68 232 92Q246 108 236 132" pathLength="1"></path>
+      <path d="M222 122Q300 86 374 150" pathLength="1"></path>
+      <path
+        class="boneco__sorriso"
+        d="M248 214Q256 264 306 262Q330 260 342 246"
+        pathLength="1"
+      ></path>
+      <path class="boneco__tronco" d="M262 288L178 500" pathLength="1"></path>
+      <path class="boneco__braco" d="M100 250L392 386" pathLength="1"></path>
+    </g>
+    <g class="boneco__olhos">
+      <circle cx="283" cy="182" r="12"></circle>
+      <circle cx="336" cy="211" r="12"></circle>
+    </g>
+  </g>
+</svg>
+
+<style>
+  .boneco {
+    display: block;
+    overflow: visible;
+    width: 100%;
+    height: auto;
+  }
+  .boneco__pincel {
+    fill: var(--brand-yellow);
+  }
+  .boneco__traco {
+    fill: none;
+    stroke: var(--brand-ink);
+    stroke-width: 22;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .boneco__olhos {
+    fill: var(--brand-ink);
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: translate(var(--olho-x, 0px), var(--olho-y, 0px));
+    transition: transform 180ms var(--ease-out);
+  }
+  .boneco__braco,
+  .boneco__corpo {
+    transform-box: view-box;
+  }
+  .boneco__braco {
+    transform-origin: 250px 320px;
+  }
+  .boneco__corpo {
+    transform-origin: 220px 500px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Desenho do traço */
+    .boneco--desenhar .boneco__traco > * {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      animation: boneco-traco 900ms var(--ease-out) forwards;
+    }
+    .boneco--desenhar .boneco__traco > :nth-child(2) {
+      animation-delay: 350ms;
+    }
+    .boneco--desenhar .boneco__traco > :nth-child(3) {
+      animation-delay: 450ms;
+    }
+    .boneco--desenhar .boneco__traco > :nth-child(4) {
+      animation-delay: 700ms;
+    }
+    .boneco--desenhar .boneco__traco > :nth-child(5) {
+      animation-delay: 550ms;
+    }
+    .boneco--desenhar .boneco__traco > :nth-child(6) {
+      animation-delay: 650ms;
+    }
+    .boneco--desenhar .boneco__olhos {
+      opacity: 0;
+      animation: boneco-surge 250ms var(--ease-bounce) 900ms forwards;
+    }
+    .boneco--desenhar .boneco__pincel {
+      clip-path: inset(0 100% 0 0);
+      animation: boneco-pincel 600ms var(--ease-out) 100ms forwards;
+    }
+
+    /* Poses */
+    .boneco--acena .boneco__braco {
+      animation: boneco-acena 1.6s ease-in-out 1.2s infinite;
+    }
+    .boneco--pula .boneco__corpo,
+    .boneco.is-pulando .boneco__corpo {
+      animation: boneco-pula 700ms var(--ease-out);
+    }
+    .boneco--pula .boneco__corpo {
+      animation-iteration-count: infinite;
+      animation-delay: 1s;
+    }
+    .boneco--anda .boneco__corpo {
+      animation: boneco-anda 700ms ease-in-out infinite alternate;
+    }
+  }
+
+  @keyframes boneco-traco {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes boneco-surge {
+    from {
+      opacity: 0;
+      scale: 0.4;
+    }
+    to {
+      opacity: 1;
+      scale: 1;
+    }
+  }
+  @keyframes boneco-pincel {
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+  @keyframes boneco-acena {
+    0%,
+    100% {
+      rotate: 0deg;
+    }
+    25% {
+      rotate: -14deg;
+    }
+    60% {
+      rotate: 8deg;
+    }
+  }
+  @keyframes boneco-pula {
+    0%,
+    100% {
+      translate: 0 0;
+      scale: 1 1;
+    }
+    18% {
+      translate: 0 0;
+      scale: 1.06 0.92;
+    }
+    45% {
+      translate: 0 -22%;
+      scale: 0.96 1.05;
+    }
+    75% {
+      translate: 0 0;
+      scale: 1.04 0.96;
+    }
+  }
+  @keyframes boneco-anda {
+    from {
+      rotate: -5deg;
+      translate: 0 0;
+    }
+    to {
+      rotate: 5deg;
+      translate: 0 -4%;
+    }
+  }
+</style>

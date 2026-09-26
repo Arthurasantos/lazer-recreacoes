@@ -1,0 +1,68 @@
+<!doctype html>
+<!-- Modelo da imagem de compartilhamento (1200×630). Gere com: pnpm og -->
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      @font-face {
+        font-family: "Fraunces";
+        src: url("../node_modules/@fontsource-variable/fraunces/files/fraunces-latin-standard-italic.woff2");
+        font-style: italic;
+        font-weight: 100 900;
+      }
+      @font-face {
+        font-family: "Figtree";
+        src: url("../node_modules/@fontsource-variable/figtree/files/figtree-latin-wght-normal.woff2");
+        font-weight: 300 900;
+      }
+      * { box-sizing: border-box; margin: 0; }
+      body {
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        position: relative;
+        font-family: "Figtree", sans-serif;
+        color: #22090b;
+        background: radial-gradient(900px 600px at 95% -10%, #fff59a 0%, transparent 62%), #fffbef;
+      }
+      .faixas {
+        position: absolute; left: 0; right: 0; bottom: 0; height: 26px;
+        background: linear-gradient(180deg, #e3050f 0 36%, transparent 36% 46%, #fdf305 46% 72%, transparent 72% 80%, #e3050f 80% 100%);
+      }
+      .logo { position: absolute; left: 72px; top: 48px; width: 260px; }
+      h1 {
+        position: absolute; left: 72px; top: 220px; width: 620px;
+        font-family: "Fraunces", serif; font-style: italic; font-weight: 850;
+        font-size: 78px; line-height: 0.98; letter-spacing: -0.02em;
+      }
+      .destaque { color: #e3050f; text-shadow: -4px 4px 0 #fdf305, -6px 6px 0 #140608; }
+      p { position: absolute; left: 72px; bottom: 70px; font-size: 28px; font-weight: 600; color: #4a2a26; }
+      p strong { color: #c8000c; }
+      .foto {
+        position: absolute; right: 80px; top: 118px; width: 380px; height: 380px;
+        border: 5px solid #140608; border-radius: 28px; object-fit: cover; rotate: 3deg;
+        box-shadow: -16px 16px 0 0 #fdf305, -16px 16px 0 5px #140608;
+      }
+      .boneco { position: absolute; right: 40px; top: 58px; width: 130px; rotate: 10deg; }
+    </style>
+  </head>
+  <body>
+    <img class="logo" src="../public/logo.svg" alt="" />
+    <h1>Seu filho <span class="destaque">brincando.</span> Você curtindo a festa.</h1>
+    <p>Recreação infantil no Recife desde 1995 · a partir de <strong>R$ 350</strong></p>
+    <img class="foto" src="../src/assets/fotos/lego-aniversario.jpg" alt="" />
+    <svg class="boneco" viewBox="50 40 390 490" xmlns="http://www.w3.org/2000/svg">
+      <path fill="#FDF305" d="M158 62L300 56L405 72L418 118L398 150L416 196L402 248L414 300L396 340L408 392L384 424L398 470L372 508L250 514L96 506L72 470L92 436L70 396L104 360L84 318L118 280L102 236L136 196L118 150L142 110Z"/>
+      <g fill="none" stroke="#140608" stroke-width="22" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="302" cy="196" r="88"/>
+        <path d="M150 78Q205 68 232 92Q246 108 236 132"/>
+        <path d="M222 122Q300 86 374 150"/>
+        <path d="M248 214Q256 264 306 262Q330 260 342 246"/>
+        <path d="M262 288L178 500"/>
+        <path d="M100 250L392 386"/>
+      </g>
+      <g fill="#140608"><circle cx="283" cy="182" r="12"/><circle cx="336" cy="211" r="12"/></g>
+    </svg>
+    <span class="faixas"></span>
+  </body>
+</html>

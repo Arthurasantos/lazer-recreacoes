@@ -1,0 +1,133 @@
+---
+import Logo from "./Logo.astro";
+import { empresa } from "../data/empresa";
+import { servicos } from "../data/servicos";
+import { linkWhatsApp, mensagemGeral } from "../lib/whatsapp";
+
+const ano = new Date().getFullYear();
+---
+
+<footer class="rodape">
+  <span class="faixas" aria-hidden="true"></span>
+  <div class="container rodape__grade">
+    <div class="rodape__marca">
+      <Logo class="rodape__logo" />
+      <p class="rodape__slogan">{empresa.slogan} desde 1995.</p>
+    </div>
+    <div>
+      <h2 class="rodape__titulo">Fale com a gente</h2>
+      <ul class="rodape__lista">
+        <li>
+          <a
+            href={linkWhatsApp(mensagemGeral())}
+            target="_blank"
+            rel="noopener"
+            data-evento="whatsapp_rodape"
+          >
+            WhatsApp {empresa.whatsapp.exibicao}
+          </a>
+        </li>
+        <li>
+          <a href={empresa.instagram.url} target="_blank" rel="noopener">
+            @{empresa.instagram.usuario}
+          </a>
+        </li>
+        <li>
+          {empresa.cidade}, {empresa.uf}, e onde a festa estiver
+        </li>
+      </ul>
+    </div>
+    <div>
+      <h2 class="rodape__titulo">Eventos</h2>
+      <ul class="rodape__lista">
+        {servicos.map((s) => (
+          <li>
+            <a href={`/${s.slug}`}>{s.titulo}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <div>
+      <h2 class="rodape__titulo">Site</h2>
+      <ul class="rodape__lista">
+        <li>
+          <a href="/#eventos">Eventos</a>
+        </li>
+        <li>
+          <a href="/#monte-sua-festa">Monte sua festa</a>
+        </li>
+        <li>
+          <a href="/#duvidas">Dúvidas frequentes</a>
+        </li>
+        <li>
+          <a href="/privacidade">Política de privacidade</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="container rodape__base">
+    <p>
+      © {ano} {empresa.nome}. Todos os direitos reservados.
+    </p>
+  </div>
+</footer>
+
+<style>
+  .rodape {
+    margin-top: var(--space-section);
+    background: var(--bg-deep);
+    padding-bottom: calc(var(--space-2xl) + env(safe-area-inset-bottom));
+  }
+  .rodape__grade {
+    display: grid;
+    gap: var(--space-2xl);
+    padding-top: var(--space-3xl);
+  }
+  @media (min-width: 48rem) {
+    .rodape__grade {
+      grid-template-columns: 1.3fr 1fr 1fr 1fr;
+    }
+  }
+  .rodape__logo {
+    width: 11rem;
+  }
+  .rodape__slogan {
+    margin-top: var(--space-m);
+    color: var(--text-muted);
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: var(--step-1);
+  }
+  .rodape__titulo {
+    font-size: var(--step--1);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+    margin-bottom: var(--space-m);
+  }
+  .rodape__lista {
+    display: grid;
+    gap: var(--space-xs);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--text-muted);
+  }
+  .rodape__lista a {
+    display: inline-block;
+    padding-block: 0.3rem;
+    text-decoration-color: var(--border-strong);
+    text-underline-offset: 0.25em;
+  }
+  .rodape__lista a:hover {
+    color: var(--text);
+    text-decoration-color: var(--realce);
+  }
+  .rodape__base {
+    margin-top: var(--space-2xl);
+    padding-top: var(--space-l);
+    border-top: 1px solid var(--border);
+    font-size: var(--step--1);
+    color: var(--text-subtle);
+  }
+</style>

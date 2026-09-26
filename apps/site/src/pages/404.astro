@@ -1,0 +1,56 @@
+---
+import Base from "../layouts/Base.astro";
+import Bonequinho from "../components/Bonequinho.astro";
+---
+
+<Base
+  titulo="Página não encontrada · Lazer Recreações"
+  descricao="Essa página não existe, mas a festa continua."
+  semCtaFixo
+>
+  <section class="secao nao-achou">
+    <div class="container nao-achou__grade">
+      <div class="nao-achou__boneco" data-boneco-pula>
+        <Bonequinho pose="anda" desenhar olhar />
+      </div>
+      <div>
+        <p class="sobretitulo">Erro 404</p>
+        <h1 class="display nao-achou__titulo">
+          Essa brincadeira <span class="destaque">não existe.</span>
+        </h1>
+        <p class="texto-apoio">
+          O bonequinho procurou por toda parte e não achou esta página. Que tal voltar para o começo
+          da festa?
+        </p>
+        <a class="botao botao--grande nao-achou__botao" href="/">
+          Voltar para a página inicial
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nao-achou__grade {
+    display: grid;
+    gap: var(--space-2xl);
+    align-items: center;
+  }
+  @media (min-width: 48rem) {
+    .nao-achou__grade {
+      grid-template-columns: auto 1fr;
+    }
+  }
+  .nao-achou__boneco {
+    width: clamp(8rem, 6rem + 8vw, 14rem);
+    justify-self: center;
+    cursor: pointer;
+  }
+  .nao-achou__titulo {
+    font-size: var(--step-5);
+    margin-bottom: var(--space-l);
+  }
+  .nao-achou__botao {
+    margin-top: var(--space-xl);
+  }
+</style>

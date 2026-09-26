@@ -1,0 +1,83 @@
+/*
+ * Lazer Recreações — tokens visuais
+ * Direção criativa: "Camada Dupla" (ver docs/direcao-criativa.md)
+ * Site público em tema claro (pedido do Arthur, 26/09/2026). Cores da marca medidas no logo oficial.
+ */
+:root {
+  color-scheme: light;
+
+  /* Marca (valores exatos do logo) */
+  --brand-red: #e3050f;
+  --brand-yellow: #fdf305;
+  --brand-ink: #140608; /* contorno preto do logo */
+  --brand-cream: oklch(99% 0.012 95); /* branco da farda */
+  --logo-texto: var(--brand-ink);
+
+  /* Superfícies: creme e sol, como a farda branca com faixas vermelho e amarelo.
+     Tema claro no site público por pedido explícito do Arthur (26/09/2026): o site é para crianças. */
+  --bg: oklch(98.4% 0.02 95); /* creme */
+  --bg-deep: oklch(95.5% 0.075 100); /* amarelo-sol claro (faixas de seção, rodapé) */
+  --sol: oklch(93% 0.15 103); /* amarelo forte para seções de destaque */
+  --surface-1: oklch(100% 0 0); /* cards */
+  --surface-2: oklch(97.5% 0.025 95);
+  --surface-3: oklch(94% 0.045 95);
+  --border: oklch(22% 0.04 20 / 0.12);
+  --border-strong: oklch(22% 0.04 20 / 0.28);
+
+  /* Texto */
+  --text: oklch(21% 0.045 20);
+  --text-muted: oklch(37% 0.05 25);
+  --text-subtle: oklch(46% 0.05 25);
+
+  /* Ação: botão amarelo com contorno preto e camada vermelha */
+  --accent: oklch(93.5% 0.2 106);
+  --accent-hover: oklch(96% 0.19 106);
+  --accent-ink: var(--brand-ink);
+  --red: oklch(58.5% 0.235 28);
+  --red-bright: oklch(50% 0.21 28); /* vermelho de texto pequeno (contraste AA no creme) */
+  --realce: oklch(52% 0.215 28); /* textos de destaque: sobretítulos, links, números */
+  --on-red: oklch(99% 0.01 95);
+
+  /* Assinatura: camada dupla (a camada de trás desce para a esquerda, como no L) */
+  --layer: clamp(0.5rem, 0.35rem + 0.5vw, 0.8rem);
+  --layer-sm: 0.35rem;
+  --outline: 3px;
+
+  /* Tipografia */
+  --font-display: "Fraunces Variable", "Georgia", serif;
+  --font-body: "Figtree Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --display-axes: normal; /* opsz é aplicado automaticamente pelo tamanho da fonte */
+
+  --step--1: clamp(0.875rem, 0.85rem + 0.12vw, 0.95rem);
+  --step-0: clamp(1rem, 0.96rem + 0.2vw, 1.125rem);
+  --step-1: clamp(1.2rem, 1.1rem + 0.45vw, 1.45rem);
+  --step-2: clamp(1.45rem, 1.25rem + 0.9vw, 2rem);
+  --step-3: clamp(1.8rem, 1.45rem + 1.6vw, 2.85rem);
+  --step-4: clamp(2.3rem, 1.7rem + 2.8vw, 4.2rem);
+  --step-5: clamp(2.9rem, 1.9rem + 4.8vw, 6.8rem);
+
+  /* Espaço (escala de 4/8) */
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-s: 0.75rem;
+  --space-m: 1rem;
+  --space-l: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4.5rem;
+  --space-section: clamp(4.5rem, 2.5rem + 7vw, 9.5rem);
+  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+  --max-width: 76rem;
+
+  /* Formas */
+  --radius-s: 0.5rem;
+  --radius-m: 0.9rem;
+  --radius-l: 1.5rem;
+  --radius-pill: 999px;
+
+  /* Movimento */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-ui: 200ms;
+  --dur-story: 700ms;
+}

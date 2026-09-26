@@ -1,0 +1,388 @@
+@import "@lazer/tokens/tokens.css";
+
+/* ---------- Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+  background: var(--bg-deep);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  font-weight: 420;
+  line-height: 1.65;
+  color: var(--text);
+  background:
+    radial-gradient(60rem 40rem at 90% -10%, oklch(95% 0.12 103 / 0.8), transparent 65%),
+    radial-gradient(45rem 30rem at -10% 40%, oklch(93% 0.06 30 / 0.45), transparent 60%), var(--bg);
+  background-attachment: fixed;
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Confete: textura de festa, esmaecendo em direção ao texto (lado esquerdo) */
+.confete {
+  position: relative;
+  isolation: isolate;
+}
+.confete::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-size: 260px 260px;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0 55%, #000 90%);
+  mask-image: linear-gradient(180deg, transparent 0 55%, #000 90%);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cg opacity='.55'%3E%3Crect x='18' y='24' width='10' height='5' rx='1.5' fill='%23e3050f' transform='rotate(28 23 26)'/%3E%3Ccircle cx='96' cy='40' r='4' fill='%23f2d200'/%3E%3Crect x='160' y='18' width='9' height='5' rx='1.5' fill='%23f2d200' transform='rotate(-35 164 20)'/%3E%3Ccircle cx='190' cy='110' r='3.5' fill='%23e3050f'/%3E%3Crect x='60' y='120' width='10' height='5' rx='1.5' fill='%23140608' opacity='.5' transform='rotate(60 65 122)'/%3E%3Ccircle cx='30' cy='180' r='4' fill='%23f2d200'/%3E%3Crect x='120' y='170' width='10' height='5' rx='1.5' fill='%23e3050f' transform='rotate(-15 125 172)'/%3E%3Cpath d='M140 90q6-8 12 0t12 0' stroke='%23e3050f' stroke-width='2.5' fill='none' stroke-linecap='round'/%3E%3C/g%3E%3C/svg%3E");
+}
+@media (min-width: 60rem) {
+  .confete::before {
+    -webkit-mask-image: linear-gradient(90deg, transparent 0 45%, #000 80%);
+    mask-image: linear-gradient(90deg, transparent 0 45%, #000 80%);
+  }
+}
+
+/* Bandeirinhas de festa (vermelho e amarelo) */
+:root {
+  --bandeirinhas-img: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='30'%3E%3Cpath d='M0 3 Q36 9 72 3' stroke='%23140608' stroke-width='2' fill='none'/%3E%3Cpath d='M4 4 L32 6 L18 28 Z' fill='%23e3050f' stroke='%23140608' stroke-width='1.5' stroke-linejoin='round'/%3E%3Cpath d='M40 6 L68 4 L54 28 Z' fill='%23fdf305' stroke='%23140608' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+.bandeirinhas {
+  display: block;
+  height: 30px;
+  background: var(--bandeirinhas-img) repeat-x left top / 72px 30px;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  text-wrap: balance;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+:focus-visible {
+  outline: 3px solid var(--realce);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text);
+  -webkit-box-shadow: 0 0 0 1000px var(--surface-2) inset;
+  caret-color: var(--text);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.pular-link {
+  position: absolute;
+  left: var(--space-m);
+  top: -4rem;
+  z-index: 200;
+  padding: var(--space-s) var(--space-m);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 700;
+  border-radius: var(--radius-s);
+}
+.pular-link:focus {
+  top: var(--space-m);
+}
+
+/* ---------- Layout ---------- */
+main {
+  overflow-x: clip;
+}
+
+.container {
+  width: min(100% - 2 * var(--gutter), var(--max-width));
+  margin-inline: auto;
+}
+
+.secao {
+  padding-block: var(--space-section);
+  position: relative;
+}
+
+.secao--elevada {
+  background: var(--bg-deep);
+  padding-top: calc(var(--space-section) + 1rem);
+}
+.secao--elevada::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 30px;
+  background: var(--bandeirinhas-img) repeat-x left top / 72px 30px;
+}
+
+/* ---------- Tipografia ---------- */
+.display {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 850;
+  font-variation-settings: var(--display-axes);
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+}
+
+.titulo-secao {
+  font-size: var(--step-4);
+  max-width: 18ch;
+}
+
+.sobretitulo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-m);
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--realce);
+}
+.sobretitulo::before {
+  content: "";
+  width: 1.75rem;
+  height: 0.5rem;
+  background: linear-gradient(
+    180deg,
+    var(--red) 0 45%,
+    transparent 45% 55%,
+    var(--brand-yellow) 55% 100%
+  );
+  border-radius: 2px;
+}
+
+.texto-apoio {
+  font-size: var(--step-1);
+  color: var(--text-muted);
+  max-width: 58ch;
+  line-height: 1.55;
+}
+
+/* Palavra em destaque com a camada dupla do logo */
+.destaque {
+  color: var(--red);
+  text-shadow:
+    -0.045em 0.045em 0 var(--brand-yellow),
+    -0.07em 0.07em 0 var(--brand-ink);
+  padding-inline-end: 0.08em;
+}
+
+/* ---------- Assinatura: camada dupla ----------
+ * A camada de trás é um box-shadow duplo (cor + contorno), deslocado para baixo e à esquerda
+ * como o L do logo. Box-shadow fica sempre atrás do fundo do elemento, sem brigar com z-index.
+ */
+@property --desloc {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 8px;
+}
+
+.camada {
+  --desloc: var(--layer);
+  position: relative;
+  border: var(--outline) solid var(--brand-ink);
+  border-radius: var(--radius-l);
+  background: var(--surface-1);
+  box-shadow:
+    calc(var(--desloc) * -1) var(--desloc) 0 0 var(--camada-cor, var(--brand-yellow)),
+    calc(var(--desloc) * -1) var(--desloc) 0 var(--outline) var(--brand-ink);
+  transition:
+    translate var(--dur-ui) var(--ease-out),
+    box-shadow var(--dur-ui) var(--ease-out);
+}
+.camada--vermelha {
+  --camada-cor: var(--red);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .camada--interativa:hover {
+    --desloc: calc(var(--layer) * 1.6);
+    translate: calc(var(--layer) * 0.3) calc(var(--layer) * -0.3);
+  }
+}
+
+/* ---------- Botões ---------- */
+.botao {
+  --sombra: var(--layer-sm);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 3.25rem;
+  padding: 0.8rem 1.4rem;
+  border: var(--outline) solid var(--brand-ink);
+  border-radius: var(--radius-m);
+  font: inherit;
+  font-weight: 750;
+  font-size: var(--step-0);
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  background: var(--accent);
+  color: var(--accent-ink);
+  box-shadow:
+    calc(var(--sombra) * -1) var(--sombra) 0 0 var(--red),
+    calc(var(--sombra) * -1) var(--sombra) 0 var(--outline) var(--brand-ink);
+  transition:
+    translate var(--dur-ui) var(--ease-out),
+    box-shadow var(--dur-ui) var(--ease-out),
+    background-color var(--dur-ui) var(--ease-out);
+}
+.botao svg {
+  flex: none;
+  width: 1.35em;
+  height: 1.35em;
+}
+.botao:hover {
+  background: var(--accent-hover);
+}
+.botao:active {
+  --sombra: 0px;
+  translate: calc(var(--layer-sm) * -1) var(--layer-sm);
+}
+@media (hover: hover) and (pointer: fine) {
+  .botao:hover {
+    --sombra: calc(var(--layer-sm) * 1.6);
+    translate: calc(var(--layer-sm) * 0.3) calc(var(--layer-sm) * -0.3);
+  }
+}
+
+.botao--grande {
+  min-height: 3.75rem;
+  padding: 1rem 1.75rem;
+  font-size: var(--step-1);
+}
+
+.botao--fantasma {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border-strong);
+  box-shadow: none;
+}
+.botao--fantasma:hover {
+  background: oklch(22% 0.04 20 / 0.05);
+  border-color: var(--text-muted);
+}
+@media (hover: hover) and (pointer: fine) {
+  .botao--fantasma:hover {
+    translate: 0 0;
+  }
+}
+
+/* ---------- Faixas da farda ---------- */
+.faixas {
+  display: block;
+  height: 14px;
+  background: linear-gradient(
+    180deg,
+    var(--red) 0 36%,
+    transparent 36% 46%,
+    var(--brand-yellow) 46% 72%,
+    transparent 72% 80%,
+    var(--red) 80% 100%
+  );
+}
+
+/* ---------- Migalhas (trilha de navegação) ---------- */
+.migalhas ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0 0 var(--space-l);
+  padding: 0;
+  list-style: none;
+  font-size: var(--step--1);
+  color: var(--text-subtle);
+}
+.migalhas li:not(:last-child)::after {
+  content: "/";
+  margin-left: 0.35rem;
+  color: var(--border-strong);
+}
+.migalhas a {
+  color: var(--text-muted);
+  text-underline-offset: 0.2em;
+}
+.migalhas [aria-current] {
+  color: var(--realce);
+  font-weight: 700;
+}
+
+/* ---------- Revelação ao rolar (só com JS; sem JS tudo aparece) ---------- */
+@media (prefers-reduced-motion: no-preference) {
+  .js .revela {
+    opacity: 0;
+    translate: 0 1.75rem;
+    transition:
+      opacity var(--dur-story) var(--ease-out),
+      translate var(--dur-story) var(--ease-out);
+    transition-delay: calc(var(--i, 0) * 80ms);
+  }
+  .js .revela.is-visivel {
+    opacity: 1;
+    translate: 0 0;
+  }
+}

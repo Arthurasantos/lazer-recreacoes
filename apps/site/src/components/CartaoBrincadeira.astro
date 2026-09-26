@@ -1,0 +1,146 @@
+---
+import { categorias, type Brincadeira } from "../data/brincadeiras";
+import { descreverEspaco, descreverIdade } from "../lib/brincadeiras";
+
+interface Props {
+  brincadeira: Brincadeira;
+  /** Mostra o botão "Quero na festa" (catálogo) */
+  selecionavel?: boolean;
+}
+const { brincadeira: b, selecionavel = false } = Astro.props;
+---
+
+<li class="brinc" data-brincadeira={b.id} data-nome={b.nome}>
+  <article class="camada brinc__card" data-categoria={b.categoria}>
+    <p class="brinc__categoria">{categorias[b.categoria]}</p>
+    <h3 class="brinc__nome">{b.nome}</h3>
+    <p class="brinc__descricao">{b.descricao}</p>
+    <p class="brinc__meta">
+      <span>{descreverIdade(b)}</span>
+      <span aria-hidden="true">·</span>
+      <span>{descreverEspaco(b)}</span>
+    </p>
+    {selecionavel && (
+      <button
+        type="button"
+        class="brinc__escolher"
+        aria-pressed="false"
+        aria-label={`Quero na festa: ${b.nome}`}
+        data-escolher
+      >
+        <span class="brinc__escolher-icone" aria-hidden="true" />
+        <span class="brinc__escolher-texto">Quero na festa</span>
+      </button>
+    )}
+  </article>
+</li>
+
+<style>
+  .brinc {
+    display: grid;
+  }
+  .brinc[hidden] {
+    display: none;
+  }
+  .brinc__card {
+    --desloc: var(--layer-sm);
+    display: grid;
+    grid-template-rows: auto auto 1fr auto auto;
+    gap: var(--space-xs);
+    padding: var(--space-l);
+    border-radius: var(--radius-m);
+  }
+  .brinc__card[data-categoria="movimento"],
+  .brinc__card[data-categoria="aventura"] {
+    --camada-cor: var(--red);
+  }
+  .brinc__categoria {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--realce);
+  }
+  .brinc__nome {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 750;
+    font-size: var(--step-2);
+  }
+  .brinc__descricao {
+    color: var(--text-muted);
+  }
+  .brinc__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: var(--space-xs);
+    font-size: var(--step--1);
+    font-weight: 600;
+    color: var(--text-subtle);
+  }
+  .brinc__escolher {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    justify-self: start;
+    min-height: 2.75rem;
+    margin-top: var(--space-s);
+    padding: 0.4rem 1rem 0.4rem 0.5rem;
+    border: 2px solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-weight: 700;
+    font-size: var(--step--1);
+    cursor: pointer;
+    transition:
+      background-color var(--dur-ui) var(--ease-out),
+      border-color var(--dur-ui) var(--ease-out);
+  }
+  .brinc__escolher:hover {
+    border-color: var(--realce);
+  }
+  .brinc__escolher-icone {
+    position: relative;
+    width: 1.75rem;
+    height: 1.75rem;
+    border: 2px solid var(--brand-ink);
+    border-radius: 50%;
+    background: var(--surface-3);
+    transition:
+      background-color var(--dur-ui) var(--ease-out),
+      rotate 300ms var(--ease-bounce);
+  }
+  .brinc__escolher-icone::before,
+  .brinc__escolher-icone::after {
+    content: "";
+    position: absolute;
+    inset: 50% auto auto 50%;
+    width: 0.75rem;
+    height: 2.5px;
+    border-radius: 2px;
+    background: var(--text);
+    translate: -50% -50%;
+  }
+  .brinc__escolher-icone::after {
+    rotate: 90deg;
+  }
+  .brinc__escolher[aria-pressed="true"] {
+    background: var(--accent);
+    border-color: var(--brand-ink);
+    color: var(--accent-ink);
+  }
+  .brinc__escolher[aria-pressed="true"] .brinc__escolher-icone {
+    background: var(--red);
+    rotate: 135deg;
+  }
+  .brinc__escolher[aria-pressed="true"] .brinc__escolher-icone::before,
+  .brinc__escolher[aria-pressed="true"] .brinc__escolher-icone::after {
+    background: var(--brand-cream);
+  }
+  :global(html:not(.js)) .brinc__escolher {
+    display: none;
+  }
+</style>

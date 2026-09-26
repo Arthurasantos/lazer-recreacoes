@@ -1,0 +1,141 @@
+---
+import Bonequinho from "../Bonequinho.astro";
+import { empresa } from "../../data/empresa";
+import { anosDesde } from "../../lib/anos";
+
+const anos = anosDesde(empresa.fundacao);
+---
+
+<section class="secao cuidado" aria-labelledby="cuidado-titulo">
+  <div class="container">
+    <p class="sobretitulo revela">Por que a Lazer</p>
+    <h2 id="cuidado-titulo" class="display titulo-secao revela">
+      Você cuida dos convidados. <span class="destaque">A gente cuida da criançada.</span>
+    </h2>
+
+    <div class="cuidado__grade">
+      <article class="revela cuidado__destaque-wrap" style="--i: 0">
+        <div class="camada camada--interativa cuidado__card cuidado__card--destaque">
+          <p class="cuidado__anos display">
+            <span data-anos>{anos}</span> anos
+          </p>
+          <h3>de festa no currículo</h3>
+          <p>
+            Desde 1995 a Lazer anima aniversários, colônias e eventos no Recife. É bem provável que
+            você já tenha visto a farda da equipe numa festa por aí.
+          </p>
+          <div class="cuidado__boneco" data-boneco-pula>
+            <Bonequinho pose="pula" />
+          </div>
+        </div>
+      </article>
+      {[
+        {
+          titulo: "Equipe treinada e fardada",
+          texto:
+            "Os recreadores passam por treinamento e trabalham de farda vermelha, amarela e branca: no meio do salão, você sabe exatamente quem está cuidando das crianças.",
+          faixa: true,
+        },
+        {
+          titulo: "Brincadeira certa para cada idade",
+          texto:
+            "Dos pequenininhos aos maiores, a programação muda conforme a idade e o espaço: salão, casa, condomínio ou área externa.",
+        },
+        {
+          titulo: "Tudo combinado antes",
+          texto:
+            "Data, horário, número de crianças e brincadeiras ficam acertados no WhatsApp. No dia, é só curtir.",
+        },
+        {
+          titulo: "Fotos só com autorização",
+          texto:
+            "Imagens das crianças só são publicadas com a autorização dos responsáveis. Sempre.",
+        },
+      ].map((c, i) => (
+        <article class="revela" style={`--i: ${i + 1}`}>
+          <div class="camada camada--interativa cuidado__card">
+            {c.faixa && <span class="faixas cuidado__faixa" aria-hidden="true" />}
+            <h3>{c.titulo}</h3>
+            <p>{c.texto}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .cuidado__grade {
+    display: grid;
+    gap: calc(var(--space-l) + var(--layer));
+    margin-top: var(--space-2xl);
+    padding-left: var(--layer);
+  }
+  @media (min-width: 40rem) {
+    .cuidado__grade {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .cuidado__destaque-wrap {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (min-width: 64rem) {
+    .cuidado__grade {
+      grid-template-columns: 1.2fr 1fr 1fr;
+    }
+    .cuidado__destaque-wrap {
+      grid-column: 1;
+      grid-row: span 2;
+    }
+  }
+  .cuidado__grade > article {
+    display: grid;
+  }
+  .cuidado__card {
+    display: grid;
+    align-content: start;
+    gap: var(--space-s);
+    padding: var(--space-xl);
+  }
+  .cuidado__card h3 {
+    font-size: var(--step-2);
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 700;
+    font-variation-settings: var(--display-axes);
+  }
+  .cuidado__card p {
+    color: var(--text-muted);
+  }
+  .cuidado__card--destaque {
+    background: var(--red);
+    color: var(--on-red);
+    min-height: 22rem;
+    overflow: hidden;
+  }
+  .cuidado__card--destaque .cuidado__anos {
+    font-size: var(--step-5);
+    color: var(--brand-yellow);
+    text-shadow: -0.05em 0.05em 0 var(--brand-ink);
+    line-height: 0.9;
+  }
+  .cuidado__card--destaque h3 {
+    font-size: var(--step-3);
+  }
+  .cuidado__card--destaque p {
+    max-width: 34ch;
+    color: var(--on-red);
+  }
+  .cuidado__boneco {
+    width: 7.5rem;
+    margin-top: auto;
+    margin-left: auto;
+    padding-top: var(--space-l);
+    cursor: pointer;
+  }
+  .cuidado__faixa {
+    width: 4.5rem;
+    border-radius: 2px;
+    margin-bottom: var(--space-xs);
+  }
+</style>

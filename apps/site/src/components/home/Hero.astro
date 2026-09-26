@@ -1,0 +1,222 @@
+---
+import Bonequinho from "../Bonequinho.astro";
+import IconeWhatsApp from "../IconeWhatsApp.astro";
+import Foto from "../Foto.astro";
+import { fotos } from "../../data/fotos";
+import { empresa } from "../../data/empresa";
+import { anosDesde } from "../../lib/anos";
+import { linkWhatsApp, mensagemGeral } from "../../lib/whatsapp";
+
+const anos = anosDesde(empresa.fundacao);
+---
+
+<section class="hero confete" data-hero aria-labelledby="hero-titulo">
+  <div class="container hero__grade">
+    <div class="hero__texto">
+      <p class="sobretitulo">Recreação infantil · desde 1995</p>
+      <h1 id="hero-titulo" class="display hero__titulo">
+        Seu filho <span class="destaque">brincando.</span>
+        <span class="hero__linha2">Você curtindo a festa.</span>
+      </h1>
+      <p class="texto-apoio hero__apoio">
+        A equipe treinada da Lazer chega fardada, conduz as brincadeiras do começo ao fim e cuida da
+        criançada enquanto você aproveita cada momento. São <span data-anos>{anos}</span> anos
+        brincando com o Recife, e com quem chamar a gente, onde for.
+      </p>
+      <div class="hero__acoes">
+        <a
+          class="botao botao--grande"
+          href={linkWhatsApp(mensagemGeral())}
+          target="_blank"
+          rel="noopener"
+          data-evento="whatsapp_hero"
+        >
+          <IconeWhatsApp />
+          Quero um orçamento
+        </a>
+        <a class="botao botao--grande botao--fantasma" href="#monte-sua-festa">
+          Montar minha festa
+        </a>
+      </div>
+      <p class="hero__micro">
+        Festas a partir de <strong>R$ {empresa.precoAPartirDe}</strong>{" "}
+        <span aria-hidden="true">·</span> {empresa.pacoteBase}
+      </p>
+    </div>
+
+    <div class="hero__midia">
+      <figure class="camada hero__foto">
+        <Foto foto={fotos.lego} sizes="(min-width: 60rem) 26rem, 90vw" prioridade />
+      </figure>
+      <div class="hero__boneco" data-boneco-pula>
+        <Bonequinho pose="acena" desenhar olhar rotulo="Bonequinho da Lazer acenando" />
+      </div>
+      <div class="hero__selo" aria-hidden="true">
+        <svg viewBox="0 0 200 200">
+          <defs>
+            <path id="selo-circulo" d="M100 100m-74 0a74 74 0 1 1 148 0a74 74 0 1 1-148 0"></path>
+          </defs>
+          <circle cx="100" cy="100" r="98" class="hero__selo-fundo"></circle>
+          <text class="hero__selo-texto">
+            <textPath href="#selo-circulo" textLength="462">
+              BRINCANDO COM VOCÊ ✦ DESDE 1995 ✦
+            </textPath>
+          </text>
+          <text x="100" y="96" text-anchor="middle" class="hero__selo-numero" data-anos>
+            {anos}
+          </text>
+          <text x="100" y="126" text-anchor="middle" class="hero__selo-anos">
+            ANOS
+          </text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: clamp(2rem, 1rem + 4vw, 5rem) clamp(4.5rem, 3rem + 5vw, 7rem);
+  }
+  .hero__grade {
+    display: grid;
+    gap: clamp(3rem, 2rem + 4vw, 5rem);
+    align-items: center;
+  }
+  @media (min-width: 60rem) {
+    .hero__grade {
+      grid-template-columns: 1.25fr 0.9fr;
+    }
+  }
+  .hero__titulo {
+    font-size: var(--step-5);
+    max-width: 12ch;
+  }
+  .hero__linha2 {
+    display: block;
+    margin-top: 0.08em;
+  }
+  .hero__apoio {
+    margin-top: var(--space-l);
+  }
+  .hero__acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-m) var(--space-l);
+    margin-top: var(--space-xl);
+  }
+  .hero__micro {
+    margin-top: var(--space-l);
+    font-size: var(--step--1);
+    color: var(--text-muted);
+  }
+  .hero__micro strong {
+    color: var(--text);
+  }
+
+  .hero__midia {
+    position: relative;
+    width: min(100%, 26rem);
+    margin-inline: auto;
+    padding: 3.5rem 0 0 var(--layer);
+  }
+  .hero__foto {
+    margin: 0;
+    aspect-ratio: 1;
+    overflow: visible;
+    rotate: 2deg;
+  }
+  .hero__foto > :global(.foto-quadro) {
+    border-radius: calc(var(--radius-l) - var(--outline));
+  }
+  .hero__boneco {
+    position: absolute;
+    top: -0.5rem;
+    right: 0;
+    width: clamp(6.5rem, 5rem + 6vw, 9rem);
+    rotate: 8deg;
+    cursor: pointer;
+    filter: drop-shadow(0 10px 20px oklch(22% 0.04 20 / 0.2));
+  }
+  @media (min-width: 60rem) {
+    .hero__boneco {
+      right: -1.5rem;
+    }
+  }
+  .hero__selo {
+    position: absolute;
+    left: -1rem;
+    bottom: -2.5rem;
+    width: clamp(6.5rem, 5rem + 5vw, 8.5rem);
+  }
+  .hero__selo svg {
+    display: block;
+    overflow: visible;
+  }
+  .hero__selo-fundo {
+    fill: var(--red);
+    stroke: var(--brand-ink);
+    stroke-width: 4;
+  }
+  .hero__selo-texto {
+    font: 800 17px var(--font-body);
+    letter-spacing: 0.06em;
+    fill: var(--brand-cream);
+  }
+  .hero__selo-numero {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 900;
+    font-size: 58px;
+    font-variation-settings: var(--display-axes);
+    fill: var(--brand-yellow);
+  }
+  .hero__selo-anos {
+    font: 800 15px var(--font-body);
+    letter-spacing: 0.2em;
+    fill: var(--brand-cream);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero__selo-texto {
+      transform-origin: 100px 100px;
+      animation: selo-gira 22s linear infinite;
+    }
+    .hero__texto > * {
+      animation: hero-sobe 800ms var(--ease-out) both;
+    }
+    .hero__texto > :nth-child(2) {
+      animation-delay: 60ms;
+    }
+    .hero__texto > :nth-child(3) {
+      animation-delay: 140ms;
+    }
+    .hero__texto > :nth-child(4) {
+      animation-delay: 220ms;
+    }
+    .hero__texto > :nth-child(5) {
+      animation-delay: 300ms;
+    }
+    .hero__foto {
+      animation: hero-foto 900ms var(--ease-bounce) 200ms both;
+    }
+  }
+  @keyframes selo-gira {
+    to {
+      rotate: 360deg;
+    }
+  }
+  @keyframes hero-sobe {
+    from {
+      translate: 0 1.5rem;
+    }
+  }
+  @keyframes hero-foto {
+    from {
+      opacity: 0;
+      rotate: -4deg;
+      scale: 0.94;
+      --desloc: 0px;
+    }
+  }
+</style>

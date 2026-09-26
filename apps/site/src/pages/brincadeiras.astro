@@ -1,0 +1,489 @@
+---
+/**
+ * Catálogo de brincadeiras (fatia 2): filtro por idade, espaço e tipo, com a lista
+ * escolhida enviada pelo WhatsApp. Sem JavaScript, o catálogo inteiro continua visível.
+ */
+import Base from "../layouts/Base.astro";
+import Bonequinho from "../components/Bonequinho.astro";
+import CartaoBrincadeira from "../components/CartaoBrincadeira.astro";
+import IconeWhatsApp from "../components/IconeWhatsApp.astro";
+import { brincadeiras, categorias } from "../data/brincadeiras";
+import { faixas } from "../lib/brincadeiras";
+import { linkWhatsApp, mensagemGeral } from "../lib/whatsapp";
+
+const url = (caminho: string) => new URL(caminho, Astro.site).href;
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Brincadeiras da Lazer Recreações",
+    numberOfItems: brincadeiras.length,
+    itemListElement: brincadeiras.map((b, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: b.nome,
+      description: b.descricao,
+    })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Início", item: url("/") },
+      { "@type": "ListItem", position: 2, name: "Brincadeiras", item: url("/brincadeiras") },
+    ],
+  },
+];
+
+const grupos = [
+  {
+    nome: "idade",
+    legenda: "Idade das crianças",
+    opcoes: [
+      { valor: "", rotulo: "Todas" },
+      ...faixas.map((f) => ({ valor: f.id, rotulo: f.rotulo })),
+    ],
+  },
+  {
+    nome: "espaco",
+    legenda: "Espaço da festa",
+    opcoes: [
+      { valor: "", rotulo: "Qualquer" },
+      { valor: "pequeno", rotulo: "Espaço pequeno" },
+      { valor: "amplo", rotulo: "Área ampla" },
+    ],
+  },
+  {
+    nome: "tipo",
+    legenda: "Tipo",
+    opcoes: [
+      { valor: "", rotulo: "Todos" },
+      ...Object.entries(categorias).map(([valor, rotulo]) => ({ valor, rotulo })),
+    ],
+  },
+];
+---
+
+<Base
+  titulo="Brincadeiras para festa infantil por idade e espaço · Lazer Recreações"
+  descricao="Catálogo de brincadeiras da Lazer Recreações: filtre pela idade das crianças e pelo espaço da festa, monte sua lista e peça o orçamento pelo WhatsApp."
+  jsonLd={jsonLd}
+  semCtaFixo
+>
+  <section class="catalogo-hero" aria-labelledby="catalogo-titulo">
+    <div class="container catalogo-hero__grade">
+      <div>
+        <nav aria-label="Você está em" class="migalhas">
+          <ol>
+            <li>
+              <a href="/">Início</a>
+            </li>
+            <li aria-current="page">Brincadeiras</li>
+          </ol>
+        </nav>
+        <h1 id="catalogo-titulo" class="display catalogo-hero__titulo">
+          Brincadeira certa para <span class="destaque">cada idade.</span>
+        </h1>
+        <p class="texto-apoio">
+          Filtre pela idade das crianças e pelo espaço da festa. Gostou? Toque em “Quero na festa”,
+          monte sua lista e mande pelo WhatsApp junto com o pedido de orçamento.
+        </p>
+      </div>
+      <div class="catalogo-hero__boneco" data-boneco-pula>
+        <Bonequinho pose="pula" olhar />
+      </div>
+    </div>
+  </section>
+
+  <section class="catalogo" aria-label="Catálogo de brincadeiras">
+    <div class="container">
+      <form class="filtros" data-filtros aria-label="Filtrar brincadeiras">
+        {grupos.map((g) => (
+          <fieldset class="filtros__grupo">
+            <legend class="filtros__legenda">{g.legenda}</legend>
+            <div class="filtros__opcoes">
+              {g.opcoes.map((o, i) => (
+                <label class="filtros__chip">
+                  <input type="radio" name={g.nome} value={o.valor} checked={i === 0} />
+                  <span>{o.rotulo}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+        ))}
+      </form>
+
+      <p class="catalogo__contagem" data-contagem aria-live="polite">
+        {brincadeiras.length} brincadeiras
+      </p>
+
+      <ul class="catalogo__grade" role="list" data-catalogo>
+        {brincadeiras.map((b) => (
+          <CartaoBrincadeira brincadeira={b} selecionavel />
+        ))}
+      </ul>
+
+      <div class="catalogo__vazio" data-vazio hidden>
+        <div class="catalogo__vazio-boneco">
+          <Bonequinho pose="anda" />
+        </div>
+        <p>
+          Nenhuma brincadeira com essa combinação. Tente outro filtro, ou pergunte no WhatsApp: o
+          repertório da equipe vai além desta lista.
+        </p>
+        <button type="button" class="botao botao--fantasma" data-limpar>
+          Limpar filtros
+        </button>
+      </div>
+
+      <p class="catalogo__nota">
+        O repertório da equipe vai além desta lista. Não achou a brincadeira que queria?{" "}
+        <a href={linkWhatsApp(mensagemGeral())} target="_blank" rel="noopener">
+          Pergunte no WhatsApp
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <div class="lista" data-lista>
+    <span class="faixas" aria-hidden="true"></span>
+    <div class="lista__linha">
+      <p class="lista__texto" data-lista-texto aria-live="polite">
+        Monte sua lista de brincadeiras
+      </p>
+      <a
+        class="botao lista__botao"
+        href={linkWhatsApp(mensagemGeral())}
+        target="_blank"
+        rel="noopener"
+        data-lista-enviar
+        data-evento="whatsapp_lista_brincadeiras"
+      >
+        <IconeWhatsApp />
+        <span data-lista-botao>Pedir orçamento</span>
+      </a>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .catalogo-hero {
+    padding-block: clamp(1.5rem, 1rem + 3vw, 4rem) var(--space-2xl);
+  }
+  .catalogo-hero__grade {
+    display: grid;
+    gap: var(--space-xl);
+    align-items: end;
+  }
+  @media (min-width: 48rem) {
+    .catalogo-hero__grade {
+      grid-template-columns: 1fr auto;
+    }
+  }
+  .catalogo-hero__titulo {
+    font-size: var(--step-5);
+    max-width: 14ch;
+    margin-bottom: var(--space-l);
+  }
+  .catalogo-hero__boneco {
+    display: none;
+    width: clamp(6rem, 5rem + 5vw, 9rem);
+    cursor: pointer;
+  }
+  @media (min-width: 48rem) {
+    .catalogo-hero__boneco {
+      display: block;
+    }
+  }
+
+  .catalogo {
+    padding-bottom: calc(var(--space-section) + 4rem);
+  }
+  .filtros {
+    display: grid;
+    gap: var(--space-l);
+    padding: var(--space-l);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-l);
+    background: var(--surface-1);
+  }
+  :global(html:not(.js)) .filtros {
+    display: none;
+  }
+  @media (min-width: 64rem) {
+    .filtros {
+      grid-template-columns: auto auto 1fr;
+      column-gap: var(--space-2xl);
+    }
+  }
+  .filtros__grupo {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+  .filtros__legenda {
+    padding: 0;
+    margin-bottom: var(--space-xs);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+  }
+  .filtros__opcoes {
+    display: flex;
+    gap: var(--space-xs);
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+  @media (min-width: 40rem) {
+    .filtros__opcoes {
+      flex-wrap: wrap;
+      overflow: visible;
+    }
+  }
+  .filtros__chip {
+    position: relative;
+    flex: none;
+  }
+  .filtros__chip input {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .filtros__chip span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0.4rem 0.95rem;
+    border: 2px solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    font-weight: 650;
+    font-size: var(--step--1);
+    white-space: nowrap;
+    transition:
+      background-color var(--dur-ui) var(--ease-out),
+      border-color var(--dur-ui) var(--ease-out);
+  }
+  .filtros__chip:hover span {
+    border-color: var(--text-subtle);
+  }
+  .filtros__chip input:checked + span {
+    background: var(--accent);
+    border-color: var(--brand-ink);
+    color: var(--accent-ink);
+    box-shadow: -3px 3px 0 var(--red);
+  }
+  .filtros__chip input:focus-visible + span {
+    outline: 3px solid var(--realce);
+    outline-offset: 3px;
+  }
+
+  .catalogo__contagem {
+    margin-block: var(--space-xl) var(--space-l);
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+  .catalogo__grade {
+    display: grid;
+    gap: calc(var(--space-m) + var(--layer-sm));
+    margin: 0;
+    padding: 0 0 0 var(--layer-sm);
+    list-style: none;
+  }
+  @media (min-width: 40rem) {
+    .catalogo__grade {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 64rem) {
+    .catalogo__grade {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .catalogo__vazio {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-m);
+    padding: var(--space-2xl) var(--space-l);
+    text-align: center;
+    color: var(--text-muted);
+  }
+  .catalogo__vazio[hidden] {
+    display: none;
+  }
+  .catalogo__vazio-boneco {
+    width: 6rem;
+  }
+  .catalogo__vazio p {
+    max-width: 40ch;
+  }
+  .catalogo__nota {
+    margin-top: var(--space-2xl);
+    color: var(--text-muted);
+  }
+  .catalogo__nota a {
+    color: var(--realce);
+    font-weight: 700;
+    text-underline-offset: 0.2em;
+  }
+
+  .lista {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 60;
+    background: oklch(99% 0.012 95 / 0.95);
+    box-shadow: 0 -6px 24px oklch(22% 0.04 20 / 0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .lista .faixas {
+    height: 9px;
+  }
+  .lista__linha {
+    display: flex;
+    align-items: center;
+    gap: var(--space-m);
+    width: min(100% - 2 * var(--gutter), var(--max-width));
+    margin-inline: auto;
+    padding-block: var(--space-s);
+  }
+  .lista__texto {
+    margin-right: auto;
+    font-size: var(--step--1);
+    color: var(--text-muted);
+    line-height: 1.35;
+  }
+  .lista__texto strong {
+    color: var(--text);
+  }
+  .lista__botao {
+    flex: none;
+    min-height: 3rem;
+    padding: 0.55rem 1rem;
+    white-space: nowrap;
+  }
+  .lista.is-cheia .lista__botao {
+    animation: lista-pulsa 500ms var(--ease-bounce);
+  }
+  @keyframes lista-pulsa {
+    40% {
+      scale: 1.06;
+    }
+  }
+</style>
+
+<script>
+  import { brincadeiras, type Categoria, type Espaco } from "../data/brincadeiras";
+  import { filtrarBrincadeiras } from "../lib/brincadeiras";
+  import { linkWhatsApp, mensagemBrincadeiras, mensagemGeral } from "../lib/whatsapp";
+
+  const form = document.querySelector<HTMLFormElement>("[data-filtros]");
+  const itens = [...document.querySelectorAll<HTMLElement>("[data-brincadeira]")];
+  const contagem = document.querySelector<HTMLElement>("[data-contagem]");
+  const vazio = document.querySelector<HTMLElement>("[data-vazio]");
+  const lista = document.querySelector<HTMLElement>("[data-lista]");
+  const listaTexto = document.querySelector<HTMLElement>("[data-lista-texto]");
+  const listaBotao = document.querySelector<HTMLElement>("[data-lista-botao]");
+  const listaEnviar = document.querySelector<HTMLAnchorElement>("[data-lista-enviar]");
+
+  // Mapeia o nome do campo no formulário para o parâmetro da URL
+  const campos = ["idade", "espaco", "tipo"] as const;
+
+  const lerFiltro = () => {
+    const f = new FormData(form!);
+    const valor = (k: string) => String(f.get(k) ?? "") || undefined;
+    return {
+      faixa: valor("idade"),
+      espaco: valor("espaco") as Espaco | undefined,
+      categoria: valor("tipo") as Categoria | undefined,
+    };
+  };
+
+  const aplicar = () => {
+    if (!form) return;
+    const visiveis = new Set(filtrarBrincadeiras(brincadeiras, lerFiltro()).map((b) => b.id));
+    for (const el of itens) el.hidden = !visiveis.has(el.dataset.brincadeira!);
+    const n = visiveis.size;
+    if (contagem) {
+      contagem.textContent =
+        n === brincadeiras.length
+          ? `${n} brincadeiras`
+          : `${n} de ${brincadeiras.length} brincadeiras`;
+    }
+    vazio?.toggleAttribute("hidden", n > 0);
+
+    // Guarda os filtros na URL para dar para compartilhar
+    const params = new URLSearchParams();
+    const f = new FormData(form);
+    for (const c of campos) {
+      const v = String(f.get(c) ?? "");
+      if (v) params.set(c, v);
+    }
+    const busca = params.toString();
+    history.replaceState(null, "", busca ? `?${busca}` : location.pathname);
+  };
+
+  // Filtros vindos da URL (links compartilhados)
+  if (form) {
+    const params = new URLSearchParams(location.search);
+    for (const c of campos) {
+      const v = params.get(c);
+      if (!v) continue;
+      const opcao = form.querySelector<HTMLInputElement>(
+        `input[name="${c}"][value="${CSS.escape(v)}"]`,
+      );
+      if (opcao) opcao.checked = true;
+    }
+    form.addEventListener("change", aplicar);
+    aplicar();
+  }
+
+  document.querySelector("[data-limpar]")?.addEventListener("click", () => {
+    form?.reset();
+    aplicar();
+  });
+
+  // Lista de brincadeiras escolhidas
+  const escolhidas = new Set<string>();
+
+  const atualizarLista = () => {
+    const nomes = itens
+      .filter((el) => escolhidas.has(el.dataset.brincadeira!))
+      .map((el) => el.dataset.nome!);
+    const n = nomes.length;
+    if (listaTexto) {
+      listaTexto.innerHTML =
+        n === 0
+          ? "Monte sua lista de brincadeiras"
+          : `<strong>${n} ${n === 1 ? "brincadeira" : "brincadeiras"}</strong> na sua lista`;
+    }
+    if (listaBotao) listaBotao.textContent = n === 0 ? "Pedir orçamento" : "Enviar lista";
+    if (listaEnviar)
+      listaEnviar.href = linkWhatsApp(n ? mensagemBrincadeiras(nomes) : mensagemGeral());
+    lista?.classList.remove("is-cheia");
+    if (n) {
+      void lista?.getBoundingClientRect();
+      lista?.classList.add("is-cheia");
+    }
+  };
+
+  for (const el of itens) {
+    const botao = el.querySelector<HTMLButtonElement>("[data-escolher]");
+    const texto = botao?.querySelector<HTMLElement>(".brinc__escolher-texto");
+    botao?.addEventListener("click", () => {
+      const id = el.dataset.brincadeira!;
+      const marcado = !escolhidas.has(id);
+      if (marcado) escolhidas.add(id);
+      else escolhidas.delete(id);
+      botao.setAttribute("aria-pressed", String(marcado));
+      if (texto) texto.textContent = marcado ? "Na sua lista" : "Quero na festa";
+      atualizarLista();
+    });
+  }
+</script>

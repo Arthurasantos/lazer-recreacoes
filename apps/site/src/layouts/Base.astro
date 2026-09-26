@@ -1,0 +1,90 @@
+---
+import "@fontsource-variable/figtree";
+import "@fontsource-variable/fraunces/standard-italic.css";
+import "../styles/global.css";
+import Cabecalho from "../components/Cabecalho.astro";
+import Rodape from "../components/Rodape.astro";
+import CtaFixo from "../components/CtaFixo.astro";
+import { empresa } from "../data/empresa";
+
+interface Props {
+  titulo: string;
+  descricao: string;
+  /** Dados estruturados extras da página (ex.: FAQPage). */
+  jsonLd?: Record<string, unknown>[];
+  semCtaFixo?: boolean;
+  /** Mensagem do WhatsApp nos CTAs globais (cabeçalho e barra fixa), conforme a página. */
+  mensagemWhatsApp?: string;
+}
+const { titulo, descricao, jsonLd = [], semCtaFixo = false, mensagemWhatsApp } = Astro.props;
+const canonica = new URL(Astro.url.pathname, Astro.site);
+const imagemOg = new URL("/og.png", Astro.site);
+
+const negocio = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "@id": new URL("/#empresa", Astro.site).href,
+  name: empresa.nome,
+  slogan: empresa.slogan,
+  description: descricao,
+  url: new URL("/", Astro.site).href,
+  logo: new URL("/logo.svg", Astro.site).href,
+  image: imagemOg.href,
+  telephone: "+55 81 99976-2591",
+  foundingDate: empresa.fundacao,
+  priceRange: `A partir de R$ ${empresa.precoAPartirDe}`,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: empresa.cidade,
+    addressRegion: empresa.uf,
+    addressCountry: "BR",
+  },
+  areaServed: [
+    { "@type": "City", name: "Recife" },
+    { "@type": "AdministrativeArea", name: "Região Metropolitana do Recife" },
+  ],
+  sameAs: [empresa.instagram.url],
+};
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{titulo}</title>
+    <meta name="description" content={descricao} />
+    <link rel="canonical" href={canonica} />
+    <meta name="theme-color" content="#fffbef" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content={empresa.nome} />
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={descricao} />
+    <meta property="og:url" content={canonica} />
+    <meta property="og:image" content={imagemOg} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script is:inline>
+      document.documentElement.classList.add("js");
+    </script>
+    <script type="application/ld+json" set:html={JSON.stringify([negocio, ...jsonLd])} />
+  </head>
+  <body>
+    <a class="pular-link" href="#conteudo">
+      Pular para o conteúdo
+    </a>
+    <Cabecalho mensagem={mensagemWhatsApp} />
+    <main id="conteudo">
+      <slot />
+    </main>
+    <Rodape />
+    {!semCtaFixo && <CtaFixo mensagem={mensagemWhatsApp} />}
+    <script src="../scripts/interacoes.ts"></script>
+  </body>
+</html>

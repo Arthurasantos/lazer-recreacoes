@@ -1,0 +1,41 @@
+---
+import Base from "../layouts/Base.astro";
+import Hero from "../components/home/Hero.astro";
+import Credenciais from "../components/home/Credenciais.astro";
+import Cuidado from "../components/home/Cuidado.astro";
+import Eventos from "../components/home/Eventos.astro";
+import ComoFunciona from "../components/home/ComoFunciona.astro";
+import Brincadeiras from "../components/home/Brincadeiras.astro";
+import MonteSuaFesta from "../components/home/MonteSuaFesta.astro";
+import Galeria from "../components/home/Galeria.astro";
+import Duvidas from "../components/home/Duvidas.astro";
+import CtaFinal from "../components/home/CtaFinal.astro";
+import { faq } from "../data/faq";
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faq.map((f) => ({
+    "@type": "Question",
+    name: f.pergunta,
+    acceptedAnswer: { "@type": "Answer", text: f.resposta },
+  })),
+};
+---
+
+<Base
+  titulo="Lazer Recreações · Recreação infantil no Recife desde 1995"
+  descricao="Recreadores fardados para aniversários, colônias de férias, casamentos e eventos no Recife e onde a festa estiver. Festas a partir de R$ 350. Peça seu orçamento pelo WhatsApp."
+  jsonLd={[faqJsonLd]}
+>
+  <Hero />
+  <Credenciais />
+  <Cuidado />
+  <Eventos />
+  <ComoFunciona />
+  <Brincadeiras />
+  <MonteSuaFesta />
+  <Galeria />
+  <Duvidas />
+  <CtaFinal />
+</Base>

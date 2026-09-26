@@ -1,0 +1,88 @@
+---
+import IconeWhatsApp from "./IconeWhatsApp.astro";
+import Bonequinho from "./Bonequinho.astro";
+import { linkWhatsApp, mensagemGeral } from "../lib/whatsapp";
+import { empresa } from "../data/empresa";
+
+interface Props {
+  mensagem?: string;
+}
+const { mensagem = mensagemGeral() } = Astro.props;
+---
+
+<div class="cta-fixo" data-cta-fixo>
+  <span class="faixas" aria-hidden="true"></span>
+  <div class="cta-fixo__linha">
+    <Bonequinho class="cta-fixo__boneco" pose="acena" />
+    <p class="cta-fixo__texto">
+      A partir de <strong>R$ {empresa.precoAPartirDe}</strong>
+    </p>
+    <a
+      class="botao cta-fixo__botao"
+      href={linkWhatsApp(mensagem)}
+      target="_blank"
+      rel="noopener"
+      data-evento="whatsapp_fixo"
+    >
+      <IconeWhatsApp />
+      Pedir orçamento
+    </a>
+  </div>
+</div>
+
+<style>
+  .cta-fixo {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 60;
+    background: oklch(99% 0.012 95 / 0.95);
+    box-shadow: 0 -6px 24px oklch(22% 0.04 20 / 0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    padding-bottom: env(safe-area-inset-bottom);
+    translate: 0 110%;
+    transition: translate 350ms var(--ease-out);
+  }
+  .cta-fixo.is-visivel {
+    translate: 0 0;
+  }
+  .cta-fixo .faixas {
+    height: 9px;
+  }
+  .cta-fixo__linha {
+    display: flex;
+    align-items: center;
+    gap: var(--space-s);
+    padding: var(--space-s) var(--gutter);
+  }
+  .cta-fixo__boneco {
+    width: 2.6rem;
+    flex: none;
+    margin-top: -1.4rem;
+  }
+  .cta-fixo__texto {
+    font-size: var(--step--1);
+    color: var(--text-muted);
+    line-height: 1.3;
+    margin-right: auto;
+  }
+  .cta-fixo__texto strong {
+    color: var(--text);
+    white-space: nowrap;
+  }
+  .cta-fixo__botao {
+    min-height: 3rem;
+    padding: 0.55rem 1rem;
+    white-space: nowrap;
+  }
+  @media (max-width: 22rem) {
+    .cta-fixo__texto {
+      display: none;
+    }
+  }
+  @media (min-width: 60rem) {
+    .cta-fixo {
+      display: none;
+    }
+  }
+</style>
