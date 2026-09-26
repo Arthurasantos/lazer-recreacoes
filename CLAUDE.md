@@ -33,6 +33,7 @@ Dono da empresa: **Paulino**. O site está sendo feito **de surpresa** para ele:
 - Área atendida: qualquer lugar (o valor muda com o local). Todos os recreadores moram no Recife e na região metropolitana.
 - Nome oficial **Lazer Recreações** (a farda do mockup com "Recreação" estava errada). O amarelo oficial é o do logo, `#FDF305`; o vermelho é `#E3050F`.
 - O **bonequinho** da farda é ativo oficial da marca.
+- A equipe **passa por treinamento** (confirmado pelo Arthur em 26/09/2026). Não detalhar o conteúdo do treinamento sem confirmação.
 - Fotos do Instagram têm autorização dos responsáveis.
 - Sinal: pago pelo cliente para reservar a data, geralmente por Pix, às vezes em dinheiro; a empresa aceita várias formas.
 

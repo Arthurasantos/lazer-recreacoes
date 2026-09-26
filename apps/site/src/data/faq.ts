@@ -16,6 +16,12 @@ export const faq: Pergunta[] = [
       "Vamos. A equipe é do Recife e da região metropolitana, e a Lazer já levou festa até os Estados Unidos. Para eventos fora do Recife, o deslocamento entra no orçamento.",
   },
   {
+    id: "treinamento",
+    pergunta: "Os recreadores são treinados?",
+    resposta:
+      "Sim. A equipe da Lazer passa por treinamentos e trabalha fardada e identificada, para você saber exatamente quem está cuidando das crianças.",
+  },
+  {
     id: "equipe",
     pergunta: "Quantos recreadores a minha festa precisa?",
     resposta:

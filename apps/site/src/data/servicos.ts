@@ -118,9 +118,9 @@ export const servicos: Servico[] = [
           texto: "As atividades são pensadas para a faixa de idade das crianças inscritas.",
         },
         {
-          titulo: "Equipe fardada",
+          titulo: "Equipe treinada e fardada",
           texto:
-            "Pais e organizadores reconhecem os recreadores de longe, pela farda vermelha, amarela e branca.",
+            "Os recreadores passam por treinamento, e pais e organizadores os reconhecem de longe pela farda vermelha, amarela e branca.",
         },
       ],
       brincadeiras: [
