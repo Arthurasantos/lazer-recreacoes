@@ -19,3 +19,6 @@ playwright-report/
 .env
 .env.*
 !.env.example
+
+# Referências baixadas do Instagram (mídias fora do repositório)
+referencias/instagram/
