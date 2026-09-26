@@ -13,3 +13,6 @@ npm-debug.log*
 
 # Build
 dist/
+
+# Referências de mídia do Instagram (não versionar)
+referencias/instagram/
