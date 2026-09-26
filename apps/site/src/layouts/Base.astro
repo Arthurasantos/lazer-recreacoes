@@ -13,8 +13,10 @@ interface Props {
   /** Dados estruturados extras da página (ex.: FAQPage). */
   jsonLd?: Record<string, unknown>[];
   semCtaFixo?: boolean;
+  /** Mensagem do WhatsApp nos CTAs globais (cabeçalho e barra fixa), conforme a página. */
+  mensagemWhatsApp?: string;
 }
-const { titulo, descricao, jsonLd = [], semCtaFixo = false } = Astro.props;
+const { titulo, descricao, jsonLd = [], semCtaFixo = false, mensagemWhatsApp } = Astro.props;
 const canonica = new URL(Astro.url.pathname, Astro.site);
 const imagemOg = new URL("/og.png", Astro.site);
 
@@ -77,12 +79,12 @@ const negocio = {
     <a class="pular-link" href="#conteudo">
       Pular para o conteúdo
     </a>
-    <Cabecalho />
+    <Cabecalho mensagem={mensagemWhatsApp} />
     <main id="conteudo">
       <slot />
     </main>
     <Rodape />
-    {!semCtaFixo && <CtaFixo />}
+    {!semCtaFixo && <CtaFixo mensagem={mensagemWhatsApp} />}
     <script src="../scripts/interacoes.ts"></script>
   </body>
 </html>

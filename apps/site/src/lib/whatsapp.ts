@@ -54,3 +54,12 @@ export function mensagemOrcamento(d: DadosFesta): string {
   campo("Idades", d.idades);
   return linhas.join("\n");
 }
+
+/** Mensagem da lista montada no catálogo de brincadeiras. */
+export function mensagemBrincadeiras(nomes: string[]): string {
+  if (!nomes.length) return mensagemGeral();
+  return [
+    `${saudacao} e quero um orçamento com estas brincadeiras:`,
+    ...nomes.map((n) => `• ${n}`),
+  ].join("\n");
+}

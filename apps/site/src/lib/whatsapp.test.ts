@@ -4,6 +4,7 @@ import {
   linkWhatsApp,
   mensagemGeral,
   mensagemOrcamento,
+  mensagemBrincadeiras,
   mensagemServico,
 } from "./whatsapp";
 
@@ -73,5 +74,17 @@ describe("mensagemOrcamento", () => {
     expect(mensagemOrcamento({ tipo: "Casamento", local: "  ", idades: "" })).toBe(
       "Olá, Paulino! Vim pelo site da Lazer e quero um orçamento:\n• Evento: Casamento",
     );
+  });
+});
+
+describe("mensagemBrincadeiras", () => {
+  it("lista as brincadeiras escolhidas", () => {
+    expect(mensagemBrincadeiras(["Gincana", "Pintura facial"])).toBe(
+      "Olá, Paulino! Vim pelo site da Lazer e quero um orçamento com estas brincadeiras:\n• Gincana\n• Pintura facial",
+    );
+  });
+
+  it("sem brincadeiras cai na mensagem geral", () => {
+    expect(mensagemBrincadeiras([])).toBe(mensagemGeral());
   });
 });

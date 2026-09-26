@@ -1,5 +1,6 @@
 ---
-import { servicos } from "../../data/empresa";
+import IconeWhatsApp from "../IconeWhatsApp.astro";
+import { servicos } from "../../data/servicos";
 import { linkWhatsApp, mensagemServico } from "../../lib/whatsapp";
 ---
 
@@ -13,8 +14,8 @@ import { linkWhatsApp, mensagemServico } from "../../lib/whatsapp";
         </h2>
       </div>
       <p class="texto-apoio revela">
-        Escolha o tipo de evento e chame no WhatsApp com a mensagem pronta. O orçamento sai do jeito
-        da sua festa.
+        Escolha o tipo de evento para ver como a Lazer trabalha, ou chame direto no WhatsApp com a
+        mensagem pronta.
       </p>
     </div>
 
@@ -32,16 +33,26 @@ import { linkWhatsApp, mensagemServico } from "../../lib/whatsapp";
             </span>
             <h3>{s.titulo}</h3>
             <p>{s.resumo}</p>
-            <a
-              class="eventos__link"
-              href={linkWhatsApp(mensagemServico(s.pedido))}
-              target="_blank"
-              rel="noopener"
-              data-evento={`whatsapp_servico_${s.id}`}
-            >
-              Pedir orçamento<span class="sr-only"> para {s.titulo.toLowerCase()}</span>
-              <span aria-hidden="true"> →</span>
-            </a>
+            <div class="eventos__acoes">
+              <a
+                class="eventos__link"
+                href={`/${s.slug}`}
+                aria-label={`Ver como funciona: ${s.titulo.toLowerCase()}`}
+              >
+                Ver como funciona
+                <span aria-hidden="true"> →</span>
+              </a>
+              <a
+                class="eventos__wpp"
+                href={linkWhatsApp(mensagemServico(s.pedido))}
+                target="_blank"
+                rel="noopener"
+                data-evento={`whatsapp_servico_${s.id}`}
+                aria-label={`Pedir orçamento para ${s.titulo.toLowerCase()} no WhatsApp`}
+              >
+                <IconeWhatsApp />
+              </a>
+            </div>
           </article>
         </li>
       ))}
@@ -101,26 +112,53 @@ import { linkWhatsApp, mensagemServico } from "../../lib/whatsapp";
   .eventos__card p {
     color: var(--text-muted);
   }
-  .eventos__link {
-    justify-self: start;
+  .eventos__acoes {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-m);
     margin-top: var(--space-s);
+  }
+  .eventos__link {
     padding-block: var(--space-xs);
     font-weight: 750;
     color: var(--accent);
     text-decoration: none;
   }
-  /* O card inteiro é clicável, mantendo um único link acessível */
+  /* O card inteiro leva à página do evento, mantendo um único link acessível */
   .eventos__link::after {
     content: "";
     position: absolute;
     inset: 0;
     border-radius: inherit;
   }
-  .eventos__card:focus-within {
+  .eventos__link:focus-visible {
+    outline: none;
+  }
+  .eventos__card:has(.eventos__link:focus-visible) {
     outline: 3px solid var(--accent);
     outline-offset: 4px;
   }
-  .eventos__link:focus-visible {
-    outline: none;
+  /* Atalho do WhatsApp fica acima do link do card */
+  .eventos__wpp {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 2px solid var(--brand-ink);
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-ink);
+    box-shadow: -3px 3px 0 var(--red);
+    transition: translate var(--dur-ui) var(--ease-out);
+  }
+  .eventos__wpp svg {
+    width: 1.3rem;
+    height: 1.3rem;
+  }
+  .eventos__wpp:hover {
+    translate: 1px -1px;
   }
 </style>

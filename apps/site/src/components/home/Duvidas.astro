@@ -1,6 +1,11 @@
 ---
-import { faq } from "../../data/faq";
+import { faq, type Pergunta } from "../../data/faq";
 import { linkWhatsApp } from "../../lib/whatsapp";
+
+interface Props {
+  perguntas?: Pergunta[];
+}
+const { perguntas = faq } = Astro.props;
 ---
 
 <section id="duvidas" class="secao duvidas" aria-labelledby="duvidas-titulo">
@@ -19,11 +24,10 @@ import { linkWhatsApp } from "../../lib/whatsapp";
         >
           Pergunte no WhatsApp
         </a>
-        .
       </p>
     </div>
     <div class="duvidas__lista">
-      {faq.map((item) => (
+      {perguntas.map((item) => (
         <details class="duvida">
           <summary>
             <span>{item.pergunta}</span>

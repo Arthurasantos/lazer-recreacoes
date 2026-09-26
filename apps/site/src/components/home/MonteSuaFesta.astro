@@ -4,6 +4,12 @@ import IconeWhatsApp from "../IconeWhatsApp.astro";
 import { empresa } from "../../data/empresa";
 import { linkWhatsApp, mensagemGeral } from "../../lib/whatsapp";
 
+interface Props {
+  /** Tipo de evento já marcado (páginas de evento) */
+  tipoInicial?: string;
+}
+const { tipoInicial } = Astro.props;
+
 const tipos = [
   "Aniversário",
   "Colônia de férias",
@@ -46,7 +52,7 @@ const tipos = [
         <div class="monte__chips">
           {tipos.map((t) => (
             <label class="monte__chip">
-              <input type="radio" name="tipo" value={t} required />
+              <input type="radio" name="tipo" value={t} required checked={t === tipoInicial} />
               <span>{t}</span>
             </label>
           ))}

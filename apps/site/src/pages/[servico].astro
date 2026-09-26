@@ -1,0 +1,354 @@
+---
+/**
+ * Página de cada tipo de evento (fatia 2). Cada uma funciona como landing própria:
+ * mensagem do WhatsApp contextual em todos os CTAs e formulário com o tipo já marcado.
+ */
+import type { GetStaticPaths } from "astro";
+import Base from "../layouts/Base.astro";
+import Bonequinho from "../components/Bonequinho.astro";
+import CartaoBrincadeira from "../components/CartaoBrincadeira.astro";
+import IconeWhatsApp from "../components/IconeWhatsApp.astro";
+import Pendente from "../components/Pendente.astro";
+import ComoFunciona from "../components/home/ComoFunciona.astro";
+import CtaFinal from "../components/home/CtaFinal.astro";
+import Duvidas from "../components/home/Duvidas.astro";
+import MonteSuaFesta from "../components/home/MonteSuaFesta.astro";
+import { brincadeiras } from "../data/brincadeiras";
+import { empresa } from "../data/empresa";
+import { perguntasPorId } from "../data/faq";
+import { servicos, type Servico } from "../data/servicos";
+import { linkWhatsApp, mensagemServico } from "../lib/whatsapp";
+
+export const getStaticPaths = (() =>
+  servicos.map((servico) => ({
+    params: { servico: servico.slug },
+    props: { servico },
+  }))) satisfies GetStaticPaths;
+
+interface Props {
+  servico: Servico;
+}
+const { servico } = Astro.props;
+const { pagina } = servico;
+
+const mensagem = mensagemServico(servico.pedido);
+const recomendadas = pagina.brincadeiras
+  .map((id) => brincadeiras.find((b) => b.id === id))
+  .filter((b) => b !== undefined);
+const outros = servicos.filter((s) => s.id !== servico.id);
+
+// Perguntas do evento primeiro, depois as gerais de preço, área e reserva
+const perguntas = [...pagina.perguntas, ...perguntasPorId("area", "reserva", "fotos")];
+
+const url = (caminho: string) => new URL(caminho, Astro.site).href;
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: servico.titulo,
+    serviceType: "Recreação infantil",
+    description: pagina.descricaoSeo,
+    provider: { "@id": url("/#empresa") },
+    areaServed: { "@type": "City", name: "Recife" },
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "BRL",
+      price: empresa.precoAPartirDe,
+      description: `A partir de R$ ${empresa.precoAPartirDe}: ${empresa.pacoteBase}`,
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Início", item: url("/") },
+      { "@type": "ListItem", position: 2, name: "Eventos", item: url("/#eventos") },
+      { "@type": "ListItem", position: 3, name: servico.titulo, item: url(`/${servico.slug}`) },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: perguntas.map((f) => ({
+      "@type": "Question",
+      name: f.pergunta,
+      acceptedAnswer: { "@type": "Answer", text: f.resposta },
+    })),
+  },
+];
+---
+
+<Base
+  titulo={pagina.tituloSeo}
+  descricao={pagina.descricaoSeo}
+  jsonLd={jsonLd}
+  mensagemWhatsApp={mensagem}
+>
+  <section class="servico-hero" data-hero aria-labelledby="servico-titulo">
+    <div class="container servico-hero__grade">
+      <div class="servico-hero__texto">
+        <nav aria-label="Você está em" class="migalhas">
+          <ol>
+            <li>
+              <a href="/">Início</a>
+            </li>
+            <li>
+              <a href="/#eventos">Eventos</a>
+            </li>
+            <li aria-current="page">{servico.titulo}</li>
+          </ol>
+        </nav>
+        <h1 id="servico-titulo" class="display servico-hero__titulo">
+          {pagina.h1} <span class="destaque">{pagina.destaque}</span>
+        </h1>
+        <p class="texto-apoio">{pagina.apoio}</p>
+        <div class="servico-hero__acoes">
+          <a
+            class="botao botao--grande"
+            href={linkWhatsApp(mensagem)}
+            target="_blank"
+            rel="noopener"
+            data-evento={`whatsapp_pagina_${servico.id}`}
+          >
+            <IconeWhatsApp />
+            Quero um orçamento
+          </a>
+          <a class="botao botao--grande botao--fantasma" href="#monte-sua-festa">
+            Montar minha festa
+          </a>
+        </div>
+        <p class="servico-hero__micro">
+          A partir de <strong>R$ {empresa.precoAPartirDe}</strong> <span aria-hidden="true">·</span>{" "}
+          {empresa.pacoteBase}
+        </p>
+      </div>
+      <div class="servico-hero__midia">
+        <figure class="camada servico-hero__foto">
+          <Pendente rotulo="Foto real do Instagram" detalhe={pagina.foto} />
+        </figure>
+        <div class="servico-hero__boneco" data-boneco-pula>
+          <Bonequinho pose="acena" desenhar olhar />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao secao--elevada pontos" aria-labelledby="pontos-titulo">
+    <div class="container">
+      <p class="sobretitulo revela">Como a Lazer faz</p>
+      <h2 id="pontos-titulo" class="display titulo-secao revela">
+        {servico.titulo}, <span class="destaque">do nosso jeito.</span>
+      </h2>
+      <ul class="pontos__grade" role="list">
+        {pagina.pontos.map((p, i) => (
+          <li class="revela" style={`--i: ${i}`}>
+            <article class="camada pontos__card">
+              <span class="pontos__numero display" aria-hidden="true">
+                {i + 1}
+              </span>
+              <h3>{p.titulo}</h3>
+              <p>{p.texto}</p>
+            </article>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="secao recomendadas" aria-labelledby="recomendadas-titulo">
+    <div class="container">
+      <div class="recomendadas__topo">
+        <div>
+          <p class="sobretitulo revela">Repertório</p>
+          <h2 id="recomendadas-titulo" class="display titulo-secao revela">
+            Brincadeiras que <span class="destaque">combinam.</span>
+          </h2>
+        </div>
+        <a class="botao botao--fantasma revela" href="/brincadeiras">
+          Ver o catálogo completo
+        </a>
+      </div>
+      <ul class="recomendadas__grade" role="list">
+        {recomendadas.map((b) => (
+          <CartaoBrincadeira brincadeira={b} />
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <ComoFunciona />
+  <MonteSuaFesta tipoInicial={servico.tipoFormulario} />
+  <Duvidas perguntas={perguntas} />
+
+  <section class="outros" aria-labelledby="outros-titulo">
+    <div class="container">
+      <h2 id="outros-titulo" class="outros__titulo">
+        Outros eventos
+      </h2>
+      <ul class="outros__lista" role="list">
+        {outros.map((s) => (
+          <li>
+            <a href={`/${s.slug}`}>{s.titulo}</a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <CtaFinal mensagem={mensagem} />
+</Base>
+
+<style>
+  .servico-hero {
+    padding-block: clamp(1.5rem, 1rem + 3vw, 4rem) clamp(4rem, 3rem + 5vw, 7rem);
+  }
+  .servico-hero__grade {
+    display: grid;
+    gap: clamp(3rem, 2rem + 4vw, 5rem);
+    align-items: center;
+  }
+  @media (min-width: 60rem) {
+    .servico-hero__grade {
+      grid-template-columns: 1.25fr 0.85fr;
+    }
+  }
+  .servico-hero__titulo {
+    font-size: var(--step-5);
+    max-width: 13ch;
+    margin-bottom: var(--space-l);
+  }
+  .servico-hero__acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-m) var(--space-l);
+    margin-top: var(--space-xl);
+  }
+  .servico-hero__micro {
+    margin-top: var(--space-l);
+    font-size: var(--step--1);
+    color: var(--text-muted);
+  }
+  .servico-hero__micro strong {
+    color: var(--text);
+  }
+  .servico-hero__midia {
+    position: relative;
+    width: min(100%, 24rem);
+    margin-inline: auto;
+    padding: 3rem 0 0 var(--layer);
+  }
+  .servico-hero__foto {
+    margin: 0;
+    aspect-ratio: 4 / 5;
+    rotate: -2deg;
+  }
+  .servico-hero__foto :global(.pendente) {
+    border-radius: calc(var(--radius-l) - var(--outline));
+  }
+  .servico-hero__boneco {
+    position: absolute;
+    top: -0.5rem;
+    right: 0;
+    width: clamp(6rem, 5rem + 5vw, 8rem);
+    rotate: 8deg;
+    cursor: pointer;
+  }
+  @media (min-width: 60rem) {
+    .servico-hero__boneco {
+      right: -1.5rem;
+    }
+  }
+
+  .pontos__grade {
+    display: grid;
+    gap: calc(var(--space-l) + var(--layer));
+    margin: var(--space-2xl) 0 0;
+    padding: 0 0 0 var(--layer);
+    list-style: none;
+  }
+  @media (min-width: 48rem) {
+    .pontos__grade {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .pontos__grade > li {
+    display: grid;
+  }
+  .pontos__card {
+    display: grid;
+    align-content: start;
+    gap: var(--space-s);
+    padding: var(--space-xl);
+  }
+  .pontos__numero {
+    font-size: var(--step-4);
+    line-height: 0.9;
+    color: var(--accent);
+    text-shadow: calc(var(--layer-sm) * -1) var(--layer-sm) 0 var(--red);
+  }
+  .pontos__card h3 {
+    font-size: var(--step-2);
+  }
+  .pontos__card p {
+    color: var(--text-muted);
+  }
+
+  .recomendadas__topo {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--space-l);
+  }
+  .recomendadas__grade {
+    display: grid;
+    gap: calc(var(--space-m) + var(--layer-sm));
+    margin: var(--space-2xl) 0 0;
+    padding: 0 0 0 var(--layer-sm);
+    list-style: none;
+  }
+  @media (min-width: 40rem) {
+    .recomendadas__grade {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 64rem) {
+    .recomendadas__grade {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .outros {
+    padding-block: var(--space-2xl);
+  }
+  .outros__titulo {
+    font-size: var(--step-1);
+    color: var(--text-muted);
+    margin-bottom: var(--space-m);
+  }
+  .outros__lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-s);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .outros__lista a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0.45rem 1.1rem;
+    border: 2px solid var(--border-strong);
+    border-radius: var(--radius-pill);
+    font-weight: 650;
+    text-decoration: none;
+    transition:
+      border-color var(--dur-ui) var(--ease-out),
+      color var(--dur-ui) var(--ease-out);
+  }
+  .outros__lista a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+</style>

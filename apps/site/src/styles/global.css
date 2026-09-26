@@ -324,6 +324,31 @@ main {
   );
 }
 
+/* ---------- Migalhas (trilha de navegação) ---------- */
+.migalhas ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0 0 var(--space-l);
+  padding: 0;
+  list-style: none;
+  font-size: var(--step--1);
+  color: var(--text-subtle);
+}
+.migalhas li:not(:last-child)::after {
+  content: "/";
+  margin-left: 0.35rem;
+  color: var(--border-strong);
+}
+.migalhas a {
+  color: var(--text-muted);
+  text-underline-offset: 0.2em;
+}
+.migalhas [aria-current] {
+  color: var(--accent);
+  font-weight: 700;
+}
+
 /* ---------- Revelação ao rolar (só com JS; sem JS tudo aparece) ---------- */
 @media (prefers-reduced-motion: no-preference) {
   .js .revela {

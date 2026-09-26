@@ -3,6 +3,11 @@ import IconeWhatsApp from "./IconeWhatsApp.astro";
 import Bonequinho from "./Bonequinho.astro";
 import { linkWhatsApp, mensagemGeral } from "../lib/whatsapp";
 import { empresa } from "../data/empresa";
+
+interface Props {
+  mensagem?: string;
+}
+const { mensagem = mensagemGeral() } = Astro.props;
 ---
 
 <div class="cta-fixo" data-cta-fixo>
@@ -14,7 +19,7 @@ import { empresa } from "../data/empresa";
     </p>
     <a
       class="botao cta-fixo__botao"
-      href={linkWhatsApp(mensagemGeral())}
+      href={linkWhatsApp(mensagem)}
       target="_blank"
       rel="noopener"
       data-evento="whatsapp_fixo"

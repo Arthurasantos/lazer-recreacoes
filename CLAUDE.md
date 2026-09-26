@@ -42,7 +42,8 @@ Dono da empresa: **Paulino**. O site está sendo feito **de surpresa** para ele:
 
 **Pendentes (confirmar com o Arthur ou o Paulino)**
 
-- Lista final de tipos de evento (`src/data/empresa.ts`) e de brincadeiras (`Brincadeiras.astro`), ambas vindas do site antigo.
+- Lista final de tipos de evento (`src/data/servicos.ts`) e de brincadeiras (`src/data/brincadeiras.ts`), ambas vindas do site antigo.
+- **Revisão de recreador**: faixas de idade, espaço (pequeno/amplo) e descrições de cada brincadeira, e os textos das páginas de evento (`servicos.ts` → `pagina`), são uma proposta inicial do Claude. O Arthur revisa com a equipe.
 - Se dá para estender a duração além de 3 h (a FAQ diz que sim).
 - CNPJ e razão social (política de privacidade).
 - Fotos reais do Instagram para o hero e a galeria. O Arthur vai exportar uma seleção.
@@ -84,10 +85,12 @@ Dono da empresa: **Paulino**. O site está sendo feito **de surpresa** para ele:
 
 ```
 apps/site/            Astro: site das famílias
-  src/data/           dados públicos (empresa, serviços, FAQ): fonte única
-  src/lib/            funções puras testadas (whatsapp.ts, anos.ts)
-  src/components/     Logo, Bonequinho, Pendente, Cabecalho, Rodape, CtaFixo
-  src/components/home seções da home
+  src/data/           dados públicos (empresa, servicos, brincadeiras, faq): fonte única
+  src/lib/            funções puras testadas (whatsapp.ts, anos.ts, brincadeiras.ts)
+  src/components/     Logo, Bonequinho, Pendente, Cabecalho, Rodape, CtaFixo, CartaoBrincadeira
+  src/components/home seções da home (várias reaproveitadas nas páginas de evento)
+  src/pages/          index, [servico] (uma página por evento), brincadeiras, privacidade, 404,
+                      sitemap.xml e robots.txt gerados no build
   src/scripts/        interações globais (sem biblioteca)
   e2e/                testes Playwright
   ferramentas/        gerador da imagem de compartilhamento (pnpm og)
@@ -99,6 +102,9 @@ Comandos: ver `README.md`. Observações do ambiente:
 
 - O `astro preview` do Astro 7 vai para segundo plano quando não há terminal interativo; o Playwright usa `--ignore-lock`.
 - O `@astrojs/check` exige TypeScript 5 ou 6 (fixado em ^6).
+- O Astro 7 remove o espaço entre um texto e uma tag inline na linha seguinte (o Prettier quebra linhas assim). Use `{" "}` no fim da linha de texto. Para conferir, busque no `dist/` por texto grudado em `<a`, `<strong>` e `<span>`.
+- Nome acessível de link ou botão: use `aria-label` em vez de `<span class="sr-only">` com pontuação (o navegador insere espaço antes do ":").
+- Novas páginas de evento: basta adicionar um item em `servicos.ts`. Página, rodapé, sitemap e testes (`e2e/fatia2.spec.ts`) se ajustam sozinhos.
 
 ## Fatias
 
@@ -106,8 +112,8 @@ Comandos: ver `README.md`. Observações do ambiente:
 | --- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------ |
 | 0   | Fundação: monorepo, tokens, CI, remoção do site antigo                                                             | ✅ feita                       |
 | 1   | Home do site: hero, credenciais, eventos, como funciona, "Monte sua festa", galeria, FAQ, privacidade, 404, SEO/OG | ✅ feita (com fotos pendentes) |
-| 2   | Páginas por tipo de evento + catálogo de brincadeiras filtrável por idade e espaço                                 | próxima                        |
-| 3   | Painel: login admin, cadastro de clientes e festas, lista/calendário, status                                       |                                |
+| 2   | Páginas por tipo de evento + catálogo de brincadeiras filtrável por idade e espaço                                 | ✅ feita (com fotos pendentes) |
+| 3   | Painel: login admin, cadastro de clientes e festas, lista/calendário, status                                       | próxima                        |
 | 4   | Pacotes e tabela oficial no painel alimentando o site                                                              |                                |
 | 5   | Portal do recreador: login por código, PWA, disponibilidade                                                        |                                |
 | 6   | Alocação manual + aceite/recusa + festa no portal com rota                                                         |                                |
@@ -119,5 +125,11 @@ Comandos: ver `README.md`. Observações do ambiente:
 
 ## Próximo passo
 
-1. **Arthur**: publicar o preview no Cloudflare Pages (passos no README), abrir no próprio celular e enviar ~12 fotos do Instagram (1 vertical para o hero, 6 para a galeria), além de confirmar as listas de eventos e brincadeiras.
-2. **Claude**: trocar os `<Pendente>` de foto por imagens otimizadas (AVIF/WebP com `srcset`), refazer a imagem OG com foto real e começar a **fatia 2**: páginas por tipo de evento (`/aniversarios`, `/colonias-de-ferias`, …), cada uma como landing própria com WhatsApp contextual, e o catálogo de brincadeiras com filtro por idade e espaço.
+1. **Arthur**:
+   - publicar o preview no Cloudflare Pages (passos no README) e abrir no próprio celular;
+   - enviar ~12 fotos do Instagram (1 vertical para o hero, 6 para a galeria e 1 por página de evento);
+   - revisar com a equipe as faixas de idade e os espaços das brincadeiras e os textos das páginas de evento;
+   - para a fatia 3: criar, com o e-mail da Lazer, uma conta no Supabase e um projeto na região São Paulo (plano grátis), e compartilhar comigo a URL do projeto e a chave `anon`, nunca a `service_role`.
+2. **Claude**:
+   - quando chegarem as fotos: trocar os `<Pendente>` de foto por imagens otimizadas (AVIF/WebP com `srcset`) e refazer a imagem OG com foto real;
+   - **fatia 3**: criar `apps/app` (Next.js), as migrações SQL iniciais (perfil, responsável, endereço, festa, pacote, pagamento) com RLS, o login do admin (e-mail + senha + TOTP) e o cadastro e a lista/calendário de festas com status. Seeds só com dados fictícios marcados como tais.

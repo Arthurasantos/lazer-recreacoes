@@ -3,8 +3,14 @@ import Logo from "./Logo.astro";
 import IconeWhatsApp from "./IconeWhatsApp.astro";
 import { linkWhatsApp, mensagemGeral } from "../lib/whatsapp";
 
+interface Props {
+  mensagem?: string;
+}
+const { mensagem = mensagemGeral() } = Astro.props;
+
 const links = [
   { href: "/#eventos", texto: "Eventos" },
+  { href: "/brincadeiras", texto: "Brincadeiras" },
   { href: "/#como-funciona", texto: "Como funciona" },
   { href: "/#monte-sua-festa", texto: "Monte sua festa" },
   { href: "/#duvidas", texto: "Dúvidas" },
@@ -27,7 +33,7 @@ const links = [
     </nav>
     <a
       class="botao cabecalho__cta"
-      href={linkWhatsApp(mensagemGeral())}
+      href={linkWhatsApp(mensagem)}
       target="_blank"
       rel="noopener"
       data-evento="whatsapp_cabecalho"
